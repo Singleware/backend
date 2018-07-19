@@ -1,0 +1,51 @@
+{
+  "author": {
+    "name": "Silas B. Domingos",
+    "email": "hello@balmante.eti.br",
+    "url": "https://balmante.eti.br"
+  },
+  "name": "@singleware/backend",
+  "description": "Singleware backend project package.",
+  "license": "MIT",
+  "version": "1.0.23",
+  "main": "release/source/index.js",
+  "types": "release/types/index.d.ts",
+  "keywords": [
+    "backend",
+    "application",
+    "empty project",
+    "project"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/singleware/backend"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "@singleware/application": "^1.0.24",
+    "@singleware/class": "^1.0.12",
+    "@singleware/observable": "^1.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.6",
+    "prettier": "^1.14.0",
+    "typescript": "^2.9.2"
+  },
+  "prettier": {
+    "printWidth": 140,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "semi": true
+  },
+  "scripts": {
+    "build": "npm run make && npm run update",
+    "make": "tsc",
+    "update": "cp -Rf ./source/*.d.ts ./release/types && npm run update-handlers && npm run update-services",
+    "update-handlers": "npm run update-file-handler && npm run update-json-handler",
+    "update-services": "cp -Rf ./source/services/*.d.ts ./release/types/services",
+    "update-file-handler": "cp -Rf ./source/handlers/file/*.d.ts ./release/types/handlers/file",
+    "update-json-handler": "cp -Rf ./source/handlers/json/*.d.ts ./release/types/handlers/json"
+  }
+}
