@@ -6,7 +6,7 @@ import * as Class from '@singleware/class';
 
 import { Status } from './status';
 import { Headers } from './headers';
-import { Access } from './access';
+import { CORS } from './cors';
 import { Output } from './output';
 
 /**
@@ -103,22 +103,26 @@ export class Response {
   @Class.Public()
   public static setMultiHeaders(output: Output, headers: Headers): void {
     for (const name in headers) {
-      Response.setHeader(output, name, <string | string[]>headers[name]);
+      const header = headers[name];
+      if (header !== void 0 && header.length > 0) {
+        Response.setHeader(output, name, header);
+      }
     }
   }
 
   /**
-   * Set the access control headers.
+   * Set the CORS headers.
    * @param output Output information.
-   * @param access Access information.
+   * @param cors CORS information.
    */
   @Class.Public()
-  public static setAccessControl(output: Output, access: Access): void {
+  public static setCORS(output: Output, access: CORS): void {
     Response.setMultiHeaders(output, {
       'Access-Control-Allow-Origin': access.origin || '*',
-      'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
       'Access-Control-Allow-Methods': access.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      'Access-Control-Allow-Headers': access.headers || ''
+      'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
+      'Access-Control-Allow-Headers': access.headers,
+      'Access-Control-Max-Age': `${access.maxAge || ''}`
     });
   }
 

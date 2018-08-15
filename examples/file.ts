@@ -4,7 +4,6 @@
  *
  * The proposal of this example is to show how to use the backend package with a default file server.
  */
-import * as Path from 'path';
 import * as Backend from '../source';
 
 // Creates an application.

@@ -7,7 +7,7 @@ import * as Application from '@singleware/application';
 
 import { Callable } from './types';
 import { Settings } from './settings';
-import { Access } from './access';
+import { CORS } from './cors';
 import { Response } from './response';
 import { Input } from './input';
 import { Output } from './output';
@@ -20,7 +20,8 @@ export class Main extends Application.Main<Input, Output> {
   /**
    * Application settings.
    */
-  @Class.Protected() protected settings: Settings;
+  @Class.Protected()
+  protected settings: Settings;
 
   /**
    * Process event handler.
@@ -30,15 +31,19 @@ export class Main extends Application.Main<Input, Output> {
   @Class.Protected()
   protected async process(match: Application.Match<Input, Output>, callback: Callable): Promise<void> {
     const methods = match.variables.methods;
-    const access = <Access>match.variables.access;
     const output = match.detail.output;
     const input = match.detail.input;
-    if (input.method === 'OPTIONS' && access) {
-      access.origin = access.origin || <string>input.headers['origin'];
-      Response.setAccessControl(output, match.variables.access);
-      Response.setStatus(output, 204);
-    } else if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
+    const cors = <CORS>match.variables.cors;
+
+    if (cors) {
+      cors.origin = cors.origin || <string>input.headers['origin'];
+      Response.setCORS(output, cors);
+    }
+
+    if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
       await super.process(match, callback);
+    } else if (input.method === 'OPTIONS') {
+      Response.setStatus(output, 204);
     } else {
       await match.next();
     }

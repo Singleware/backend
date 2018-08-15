@@ -23,7 +23,8 @@ export class Default {
   /**
    * Handler settings.
    */
-  @Class.Private() private settings: Settings;
+  @Class.Private()
+  private settings: Settings;
 
   /**
    * Gets the MIME type that corresponds to the extension of the specified file.
@@ -76,9 +77,9 @@ export class Default {
     Response.setStatus(output, status);
     if (await this.fileExists(path)) {
       const variables = {
-        '!STATUS!': status.toString(),
-        '!MESSAGE!': output.message,
-        '!INFORMATION!': information
+        '%STATUS%': status.toString(),
+        '%MESSAGE%': output.message,
+        '%INFORMATION%': information
       };
       const replacement = new RegExp(Object.keys(variables).join('|'), 'g');
       const template = (await this.readFile(path)).toString('utf-8');
@@ -169,5 +170,6 @@ export class Default {
   /**
    * Assets path.
    */
-  @Class.Private() private static assetsPath: string = Path.join(__dirname, '../../../../assets/');
+  @Class.Private()
+  private static assetsPath: string = Path.join(__dirname, '../../../../assets/');
 }

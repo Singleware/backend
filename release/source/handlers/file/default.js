@@ -73,9 +73,9 @@ let Default = Default_1 = class Default {
         response_1.Response.setStatus(output, status);
         if (await this.fileExists(path)) {
             const variables = {
-                '!STATUS!': status.toString(),
-                '!MESSAGE!': output.message,
-                '!INFORMATION!': information
+                '%STATUS%': status.toString(),
+                '%MESSAGE%': output.message,
+                '%INFORMATION%': information
             };
             const replacement = new RegExp(Object.keys(variables).join('|'), 'g');
             const template = (await this.readFile(path)).toString('utf-8');

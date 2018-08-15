@@ -4,9 +4,9 @@
  */
 
 /**
- * Access control headers interface.
+ * Access Control (CORS) headers interface.
  */
-export interface Access {
+export interface CORS {
   /**
    * Determines whether the credentials must be provided or not.
    */
@@ -23,4 +23,8 @@ export interface Access {
    * Allowed headers.
    */
   headers?: string | string[];
+  /**
+   * Max age in seconds for preflight cache.
+   */
+  maxAge?: number;
 }

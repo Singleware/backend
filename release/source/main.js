@@ -32,16 +32,18 @@ let Main = class Main extends Application.Main {
      */
     async process(match, callback) {
         const methods = match.variables.methods;
-        const access = match.variables.access;
         const output = match.detail.output;
         const input = match.detail.input;
-        if (input.method === 'OPTIONS' && access) {
-            access.origin = access.origin || input.headers['origin'];
-            response_1.Response.setAccessControl(output, match.variables.access);
-            response_1.Response.setStatus(output, 204);
+        const cors = match.variables.cors;
+        if (cors) {
+            cors.origin = cors.origin || input.headers['origin'];
+            response_1.Response.setCORS(output, cors);
         }
-        else if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
+        if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
             await super.process(match, callback);
+        }
+        else if (input.method === 'OPTIONS') {
+            response_1.Response.setStatus(output, 204);
         }
         else {
             await match.next();

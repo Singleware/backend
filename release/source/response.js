@@ -33,20 +33,24 @@ let Response = Response_1 = class Response {
      */
     static setMultiHeaders(output, headers) {
         for (const name in headers) {
-            Response_1.setHeader(output, name, headers[name]);
+            const header = headers[name];
+            if (header !== void 0 && header.length > 0) {
+                Response_1.setHeader(output, name, header);
+            }
         }
     }
     /**
-     * Set the access control headers.
+     * Set the CORS headers.
      * @param output Output information.
-     * @param access Access information.
+     * @param cors CORS information.
      */
-    static setAccessControl(output, access) {
+    static setCORS(output, access) {
         Response_1.setMultiHeaders(output, {
             'Access-Control-Allow-Origin': access.origin || '*',
-            'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
             'Access-Control-Allow-Methods': access.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            'Access-Control-Allow-Headers': access.headers || ''
+            'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
+            'Access-Control-Allow-Headers': access.headers,
+            'Access-Control-Max-Age': `${access.maxAge || ''}`
         });
     }
     /**
@@ -180,7 +184,7 @@ __decorate([
 ], Response, "setMultiHeaders", null);
 __decorate([
     Class.Public()
-], Response, "setAccessControl", null);
+], Response, "setCORS", null);
 __decorate([
     Class.Public()
 ], Response, "setStatus", null);
