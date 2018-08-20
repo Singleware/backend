@@ -30,7 +30,7 @@ let Main = class Main extends Application.Main {
      * @param match Matched routes.
      * @param callback Handler callback.
      */
-    async process(match, callback) {
+    async processHandler(match, callback) {
         const methods = match.variables.methods;
         const output = match.detail.output;
         const input = match.detail.input;
@@ -40,7 +40,7 @@ let Main = class Main extends Application.Main {
             response_1.Response.setCORS(output, cors);
         }
         if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
-            await super.process(match, callback);
+            await super.processHandler(match, callback);
         }
         else if (input.method === 'OPTIONS') {
             response_1.Response.setStatus(output, 204);
@@ -55,7 +55,7 @@ __decorate([
 ], Main.prototype, "settings", void 0);
 __decorate([
     Class.Protected()
-], Main.prototype, "process", null);
+], Main.prototype, "processHandler", null);
 Main = __decorate([
     Class.Describe()
 ], Main);

@@ -29,19 +29,17 @@ export class Main extends Application.Main<Input, Output> {
    * @param callback Handler callback.
    */
   @Class.Protected()
-  protected async process(match: Application.Match<Input, Output>, callback: Callable): Promise<void> {
+  protected async processHandler(match: Application.Match<Input, Output>, callback: Callable): Promise<void> {
     const methods = match.variables.methods;
     const output = match.detail.output;
     const input = match.detail.input;
     const cors = <CORS>match.variables.cors;
-
     if (cors) {
       cors.origin = cors.origin || <string>input.headers['origin'];
       Response.setCORS(output, cors);
     }
-
     if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
-      await super.process(match, callback);
+      await super.processHandler(match, callback);
     } else if (input.method === 'OPTIONS') {
       Response.setStatus(output, 204);
     } else {

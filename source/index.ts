@@ -15,7 +15,8 @@ export import Handlers = HandlersModule;
 
 import * as MainModule from './main';
 export import Main = MainModule.Main;
+import { Main } from '@singleware/application';
 
 // Aliases
-export const Filter = (<any>MainModule).Main.Filter;
-export const Processor = (<any>MainModule).Main.Processor;
+export const Filter = (<any>Main).Filter;
+export const Processor = (<any>Main).Processor;

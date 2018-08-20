@@ -16,7 +16,7 @@ export declare class Main extends Application.Main<Input, Output> {
      * @param match Matched routes.
      * @param callback Handler callback.
      */
-    protected process(match: Application.Match<Input, Output>, callback: Callable): Promise<void>;
+    protected processHandler(match: Application.Match<Input, Output>, callback: Callable): Promise<void>;
     /**
      * Default constructor.
      * @param settings Application settings.
