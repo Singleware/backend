@@ -69,7 +69,7 @@ export class Server implements Service {
     const address = (<Net.AddressInfo>incoming.connection.address()).address;
     const request = this.createRequest(path, method, address, incoming.headers);
     incoming.on('data', (chunk: string) => (request.input.data += chunk));
-    incoming.on('end', Class.bindCallback(() => this.responseHandler(request, response)));
+    incoming.on('end', () => this.responseHandler(request, response));
   }
 
   /**
@@ -89,7 +89,7 @@ export class Server implements Service {
     } finally {
       const output = request.output;
       response.writeHead(output.status || 501, output.message || 'Not Implemented', output.headers);
-      response.end(output.data, Class.bindCallback(() => this.events.send.notifyAll(request)));
+      response.end(output.data, () => this.events.send.notifyAll(request));
     }
   }
 
@@ -98,9 +98,8 @@ export class Server implements Service {
    * @param settings Application settings.
    */
   constructor(settings: Settings) {
-    Class.update(this);
     this.settings = settings;
-    this.server = Http.createServer(Class.bindCallback(this.requestHandler));
+    this.server = Http.createServer(this.requestHandler.bind(this));
   }
 
   /**

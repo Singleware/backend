@@ -30,9 +30,8 @@ let Server = class Server {
             receive: new Observable.Subject(),
             send: new Observable.Subject()
         };
-        Class.update(this);
         this.settings = settings;
-        this.server = Http.createServer(Class.bindCallback(this.requestHandler));
+        this.server = Http.createServer(this.requestHandler.bind(this));
     }
     /**
      * Create an unprocessed request with the specified parameters.
@@ -61,7 +60,7 @@ let Server = class Server {
         const address = incoming.connection.address().address;
         const request = this.createRequest(path, method, address, incoming.headers);
         incoming.on('data', (chunk) => (request.input.data += chunk));
-        incoming.on('end', Class.bindCallback(() => this.responseHandler(request, response)));
+        incoming.on('end', () => this.responseHandler(request, response));
     }
     /**
      * Response event handler.
@@ -81,7 +80,7 @@ let Server = class Server {
         finally {
             const output = request.output;
             response.writeHead(output.status || 501, output.message || 'Not Implemented', output.headers);
-            response.end(output.data, Class.bindCallback(() => this.events.send.notifyAll(request)));
+            response.end(output.data, () => this.events.send.notifyAll(request));
         }
     }
     /**

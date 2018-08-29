@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.0.30",
+  "version": "1.0.32",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -24,12 +24,12 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@singleware/application": "^1.0.27",
-    "@singleware/class": "^1.0.13",
-    "@singleware/observable": "^1.0.11"
+    "@singleware/application": "^1.0.29",
+    "@singleware/class": "^1.1.9",
+    "@singleware/observable": "^1.0.19"
   },
   "devDependencies": {
-    "@types/node": "^10.7.1",
+    "@types/node": "^10.9.3",
     "prettier": "^1.14.2",
     "typescript": "^2.9.2"
   },
