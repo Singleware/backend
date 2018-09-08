@@ -28,7 +28,8 @@ let Server = class Server {
          */
         this.events = {
             receive: new Observable.Subject(),
-            send: new Observable.Subject()
+            send: new Observable.Subject(),
+            error: new Observable.Subject()
         };
         this.settings = settings;
         this.server = Http.createServer(this.requestHandler.bind(this));
@@ -44,8 +45,18 @@ let Server = class Server {
     createRequest(path, method, address, headers) {
         return {
             path: path,
-            input: { method: method, address: address, headers: headers, data: '' },
-            output: { status: 0, message: '', headers: {}, data: '' },
+            input: {
+                method: method,
+                address: address,
+                headers: headers,
+                data: ''
+            },
+            output: {
+                status: 0,
+                message: '',
+                headers: {},
+                data: ''
+            },
             environment: {}
         };
     }
@@ -73,6 +84,8 @@ let Server = class Server {
         }
         catch (exception) {
             const input = request.input;
+            request.environment.exception = exception;
+            await this.events.error.notifyAll(request);
             request = this.createRequest('!', input.method, input.address, input.headers);
             request.environment.exception = this.settings.debug ? exception.stack : exception.message;
             await this.events.receive.notifyAll(request);
@@ -94,6 +107,12 @@ let Server = class Server {
      */
     get onSend() {
         return this.events.send;
+    }
+    /**
+     * Error response event.
+     */
+    get onError() {
+        return this.events.error;
     }
     /**
      * Starts the service listening.
@@ -132,6 +151,9 @@ __decorate([
 __decorate([
     Class.Public()
 ], Server.prototype, "onSend", null);
+__decorate([
+    Class.Public()
+], Server.prototype, "onError", null);
 __decorate([
     Class.Public()
 ], Server.prototype, "start", null);

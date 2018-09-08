@@ -1,6 +1,5 @@
 /// <reference types="node" />
 import { Headers } from './headers';
-import { CORS } from './cors';
 import { Output } from './output';
 /**
  * Application response helper class.
@@ -23,12 +22,6 @@ export declare class Response {
      * @param headers Headers to be set.
      */
     static setMultiHeaders(output: Output, headers: Headers): void;
-    /**
-     * Set the CORS headers.
-     * @param output Output information.
-     * @param cors CORS information.
-     */
-    static setCORS(output: Output, access: CORS): void;
     /**
      * Set the response status.
      * @param output Output information.

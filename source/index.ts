@@ -7,6 +7,9 @@ export { Response } from './response';
 export { Input } from './input';
 export { Output } from './output';
 
+import * as LoggersModule from './loggers';
+export import Loggers = LoggersModule;
+
 import * as ServicesModule from './services';
 export import Services = ServicesModule;
 
@@ -15,6 +18,7 @@ export import Handlers = HandlersModule;
 
 import * as MainModule from './main';
 export import Main = MainModule.Main;
+
 import { Main } from '@singleware/application';
 
 // Aliases

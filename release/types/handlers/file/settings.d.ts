@@ -11,15 +11,15 @@ export interface Settings {
   /**
    * Index filename.
    */
-  index: string;
+  indexFile: string;
   /**
    * Base directory path.
    */
-  directory: string;
+  baseDirectory: string;
   /**
    * Determines whether only defined MIME types must be send or not.
    */
-  strict?: boolean;
+  strictTypes?: boolean;
   /**
    * MIME types by extension.
    */

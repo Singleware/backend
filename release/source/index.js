@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var response_1 = require("./response");
 exports.Response = response_1.Response;
+const LoggersModule = require("./loggers");
+exports.Loggers = LoggersModule;
 const ServicesModule = require("./services");
 exports.Services = ServicesModule;
 const HandlersModule = require("./handlers");

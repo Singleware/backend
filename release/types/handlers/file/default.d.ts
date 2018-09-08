@@ -30,7 +30,7 @@ export declare class Default {
      */
     protected fileExists(path: string): Promise<boolean>;
     /**
-     * Set the content of a default error file into the give output response.
+     * Sets the content of a default error file into the give output response.
      * @param output Output response.
      * @param status Output status.
      * @param information Error information.
@@ -58,19 +58,19 @@ export declare class Default {
      */
     defaultResponse(match: Match): Promise<void>;
     /**
-     * Get base directory.
+     * Gets the base directory.
      */
-    readonly directory: string;
+    readonly baseDirectory: string;
     /**
-     * Get index file.
+     * Gets the index file.
      */
-    readonly index: string;
+    readonly indexFile: string;
     /**
-     * Get strict status.
+     * Gets the strict types status.
      */
-    readonly strict: boolean;
+    readonly strictTypes: boolean;
     /**
-     * Get handler types.
+     * Gets the handler types.
      */
     readonly types: MIMEs;
     /**

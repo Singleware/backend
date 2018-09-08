@@ -52,6 +52,10 @@ export declare class Server implements Service {
      */
     readonly onSend: Observable.Subject<Request>;
     /**
+     * Error response event.
+     */
+    readonly onError: Observable.Subject<Request>;
+    /**
      * Starts the service listening.
      */
     start(): void;

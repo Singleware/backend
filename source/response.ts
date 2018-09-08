@@ -6,7 +6,6 @@ import * as Class from '@singleware/class';
 
 import { Status } from './status';
 import { Headers } from './headers';
-import { CORS } from './cors';
 import { Output } from './output';
 
 /**
@@ -18,7 +17,7 @@ export class Response {
    * Messages by status.
    */
   @Class.Private()
-  private static messages: Status = {
+  private static messages = <Status>{
     100: 'Continue',
     101: 'Switching Protocols',
     102: 'Processing',
@@ -108,22 +107,6 @@ export class Response {
         Response.setHeader(output, name, header);
       }
     }
-  }
-
-  /**
-   * Set the CORS headers.
-   * @param output Output information.
-   * @param cors CORS information.
-   */
-  @Class.Public()
-  public static setCORS(output: Output, access: CORS): void {
-    Response.setMultiHeaders(output, {
-      'Access-Control-Allow-Origin': access.origin || '*',
-      'Access-Control-Allow-Methods': access.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
-      'Access-Control-Allow-Headers': access.headers,
-      'Access-Control-Max-Age': `${access.maxAge || ''}`
-    });
   }
 
   /**

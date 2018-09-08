@@ -36,7 +36,7 @@ export class Default {
     const type = Path.extname(path)
       .substring(1)
       .toLowerCase();
-    if (!this.settings.strict) {
+    if (!this.settings.strictTypes) {
       return this.settings.types[type] || 'application/octet-stream';
     }
     return this.settings.types[type];
@@ -66,7 +66,7 @@ export class Default {
   }
 
   /**
-   * Set the content of a default error file into the give output response.
+   * Sets the content of a default error file into the give output response.
    * @param output Output response.
    * @param status Output status.
    * @param information Error information.
@@ -97,7 +97,7 @@ export class Default {
   @Class.Protected()
   protected async setResponseFile(output: Output, path: string): Promise<void> {
     const type = this.getMimeType(path);
-    const file = Path.join(this.settings.directory, Path.normalize(path));
+    const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
     if (!type || !(await this.fileExists(file))) {
       await this.setResponseError(output, 404, `File '${path}' could not be found`);
     } else {
@@ -131,36 +131,36 @@ export class Default {
   @Class.Public()
   @Application.Processor({ path: '/', exact: false, environment: { methods: 'GET', access: {} } })
   public async defaultResponse(match: Match): Promise<void> {
-    const path = match.detail.path === '/' ? Path.basename(this.settings.index) : Path.normalize(match.detail.path);
+    const path = match.detail.path === '/' ? Path.basename(this.settings.indexFile) : Path.normalize(match.detail.path);
     await this.setResponseFile(match.detail.output, path);
   }
 
   /**
-   * Get base directory.
+   * Gets the base directory.
    */
   @Class.Public()
-  public get directory(): string {
-    return this.settings.directory;
+  public get baseDirectory(): string {
+    return this.settings.baseDirectory;
   }
 
   /**
-   * Get index file.
+   * Gets the index file.
    */
   @Class.Public()
-  public get index(): string {
-    return this.settings.index;
+  public get indexFile(): string {
+    return this.settings.indexFile;
   }
 
   /**
-   * Get strict status.
+   * Gets the strict types status.
    */
   @Class.Public()
-  public get strict(): boolean {
-    return this.settings.strict || false;
+  public get strictTypes(): boolean {
+    return this.settings.strictTypes || false;
   }
 
   /**
-   * Get handler types.
+   * Gets the handler types.
    */
   @Class.Public()
   public get types(): MIMEs {

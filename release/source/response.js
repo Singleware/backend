@@ -40,20 +40,6 @@ let Response = Response_1 = class Response {
         }
     }
     /**
-     * Set the CORS headers.
-     * @param output Output information.
-     * @param cors CORS information.
-     */
-    static setCORS(output, access) {
-        Response_1.setMultiHeaders(output, {
-            'Access-Control-Allow-Origin': access.origin || '*',
-            'Access-Control-Allow-Methods': access.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            'Access-Control-Allow-Credentials': access.credentials ? 'true' : 'false',
-            'Access-Control-Allow-Headers': access.headers,
-            'Access-Control-Max-Age': `${access.maxAge || ''}`
-        });
-    }
-    /**
      * Set the response status.
      * @param output Output information.
      * @param status Status code.
@@ -182,9 +168,6 @@ __decorate([
 __decorate([
     Class.Public()
 ], Response, "setMultiHeaders", null);
-__decorate([
-    Class.Public()
-], Response, "setCORS", null);
 __decorate([
     Class.Public()
 ], Response, "setStatus", null);

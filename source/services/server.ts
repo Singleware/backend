@@ -36,7 +36,8 @@ export class Server implements Service {
   @Class.Private()
   private events = {
     receive: new Observable.Subject<Request>(),
-    send: new Observable.Subject<Request>()
+    send: new Observable.Subject<Request>(),
+    error: new Observable.Subject<Request>()
   };
 
   /**
@@ -51,8 +52,18 @@ export class Server implements Service {
   private createRequest(path: string, method: string, address: string, headers: Headers): Request {
     return {
       path: path,
-      input: { method: method, address: address, headers: headers, data: '' },
-      output: { status: 0, message: '', headers: {}, data: '' },
+      input: {
+        method: method,
+        address: address,
+        headers: headers,
+        data: ''
+      },
+      output: {
+        status: 0,
+        message: '',
+        headers: {},
+        data: ''
+      },
       environment: {}
     };
   }
@@ -83,6 +94,8 @@ export class Server implements Service {
       await this.events.receive.notifyAll(request);
     } catch (exception) {
       const input = request.input;
+      request.environment.exception = exception;
+      await this.events.error.notifyAll(request);
       request = this.createRequest('!', input.method, input.address, input.headers);
       request.environment.exception = this.settings.debug ? exception.stack : exception.message;
       await this.events.receive.notifyAll(request);
@@ -116,6 +129,14 @@ export class Server implements Service {
   @Class.Public()
   public get onSend(): Observable.Subject<Request> {
     return this.events.send;
+  }
+
+  /**
+   * Error response event.
+   */
+  @Class.Public()
+  public get onError(): Observable.Subject<Request> {
+    return this.events.error;
   }
 
   /**

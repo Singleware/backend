@@ -4,25 +4,29 @@
  */
 
 /**
- * Access Control (CORS) headers interface.
+ * Access Control for Cross-Origin Request Sharing (CORS).
  */
 export interface CORS {
   /**
    * Determines whether the credentials must be provided or not.
    */
-  credentials: boolean;
+  allowCredentials?: boolean;
   /**
    * Allowed origin.
    */
-  origin?: string;
+  allowOrigin?: string;
   /**
    * Allowed methods.
    */
-  methods?: string | string[];
+  allowMethods?: string | string[];
   /**
    * Allowed headers.
    */
-  headers?: string | string[];
+  allowHeaders?: string | string[];
+  /**
+   * Exposed headers.
+   */
+  exposeHeaders?: string[];
   /**
    * Max age in seconds for preflight cache.
    */

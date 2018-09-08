@@ -6,6 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Main_1;
+"use strict";
 /**
  * Copyright (C) 2018 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -16,14 +18,31 @@ const response_1 = require("./response");
 /**
  * Back-end application class.
  */
-let Main = class Main extends Application.Main {
+let Main = Main_1 = class Main extends Application.Main {
     /**
      * Default constructor.
      * @param settings Application settings.
      */
     constructor(settings) {
-        super({ separator: '/', variable: /^\{([a-z_0-9]+)\}$/ });
+        super({
+            separator: '/',
+            variable: /^\{([a-z_0-9]+)\}$/
+        });
         this.settings = settings;
+    }
+    /**
+     * Set all security headers into the output.
+     * @param output Output information.
+     * @param input Input information.
+     * @param variables Route variables.
+     */
+    setSecurityHeaders(output, input, variables) {
+        if (this.settings.CrossOriginRequestSharing || variables.CORS) {
+            Main_1.setCORS(output, input, { ...this.settings.CrossOriginRequestSharing, ...variables.CORS });
+        }
+        if (this.settings.StrictTransportSecurity || variables.HSTS) {
+            Main_1.setHSTS(output, { ...this.settings.StrictTransportSecurity, ...variables.HSTS });
+        }
     }
     /**
      * Process event handler.
@@ -34,11 +53,7 @@ let Main = class Main extends Application.Main {
         const methods = match.variables.methods;
         const output = match.detail.output;
         const input = match.detail.input;
-        const cors = match.variables.cors;
-        if (cors) {
-            cors.origin = cors.origin || input.headers['origin'];
-            response_1.Response.setCORS(output, cors);
-        }
+        this.setSecurityHeaders(output, input, match.variables);
         if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
             await super.processHandler(match, callback);
         }
@@ -49,14 +64,59 @@ let Main = class Main extends Application.Main {
             await match.next();
         }
     }
+    /**
+     * Gets the current timestamp value in seconds.
+     * @param increment Incremental seconds.
+     * @returns Returns the sum of current timestamp and the incremental seconds.
+     */
+    static getTimestamp(increment) {
+        return Math.trunc(new Date().getTime() / 1000) + increment;
+    }
+    /**
+     * Set the CORS headers.
+     * @param output Output information.
+     * @param cors CORS information.
+     */
+    static setCORS(output, input, cors) {
+        response_1.Response.setMultiHeaders(output, {
+            'Access-Control-Allow-Origin': cors.allowOrigin || input.headers['origin'],
+            'Access-Control-Allow-Methods': cors.allowMethods || ['HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+            'Access-Control-Allow-Credentials': cors.allowCredentials ? 'true' : 'false',
+            'Access-Control-Allow-Headers': cors.allowHeaders,
+            'Access-Control-Expose-Headers': cors.exposeHeaders,
+            'Access-Control-Max-Age': cors.maxAge !== void 0 ? `${Main_1.getTimestamp(cors.maxAge)}` : void 0
+        });
+    }
+    /**
+     * Set the HSTS headers.
+     * @param output Output information.
+     * @param hsts HSTS information.
+     */
+    static setHSTS(output, hsts) {
+        const maxAge = Main_1.getTimestamp(hsts.maxAge);
+        const option = hsts.option ? `; ${hsts.option}` : '';
+        response_1.Response.setHeader(output, 'Strict-Transport-Security', `max-age=${maxAge}${option}`);
+    }
 };
 __decorate([
     Class.Protected()
 ], Main.prototype, "settings", void 0);
 __decorate([
     Class.Protected()
+], Main.prototype, "setSecurityHeaders", null);
+__decorate([
+    Class.Protected()
 ], Main.prototype, "processHandler", null);
-Main = __decorate([
+__decorate([
+    Class.Protected()
+], Main, "getTimestamp", null);
+__decorate([
+    Class.Protected()
+], Main, "setCORS", null);
+__decorate([
+    Class.Protected()
+], Main, "setHSTS", null);
+Main = Main_1 = __decorate([
     Class.Describe()
 ], Main);
 exports.Main = Main;

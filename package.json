@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.0.32",
+  "version": "1.1.4",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -24,13 +24,13 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@singleware/application": "^1.0.29",
-    "@singleware/class": "^1.1.9",
+    "@singleware/application": "^1.1.4",
+    "@singleware/class": "^1.1.11",
     "@singleware/observable": "^1.0.19"
   },
   "devDependencies": {
-    "@types/node": "^10.9.3",
-    "prettier": "^1.14.2",
+    "@types/node": "^10.10.3",
+    "prettier": "^1.14.3",
     "typescript": "^2.9.2"
   },
   "prettier": {
@@ -42,9 +42,10 @@
   "scripts": {
     "build": "npm run make && npm run update",
     "make": "tsc",
-    "update": "cp -Rf ./source/*.d.ts ./release/types && npm run update-handlers && npm run update-services",
+    "update": "cp -Rf ./source/*.d.ts ./release/types && npm run update-handlers && npm run update-services && npm run update-security",
     "update-handlers": "npm run update-file-handler && npm run update-json-handler",
     "update-services": "cp -Rf ./source/services/*.d.ts ./release/types/services",
+    "update-security": "cp -Rf ./source/security/*.d.ts ./release/types/security",
     "update-file-handler": "cp -Rf ./source/handlers/file/*.d.ts ./release/types/handlers/file",
     "update-json-handler": "cp -Rf ./source/handlers/json/*.d.ts ./release/types/handlers/json"
   }

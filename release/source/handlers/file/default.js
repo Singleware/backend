@@ -38,7 +38,7 @@ let Default = Default_1 = class Default {
         const type = Path.extname(path)
             .substring(1)
             .toLowerCase();
-        if (!this.settings.strict) {
+        if (!this.settings.strictTypes) {
             return this.settings.types[type] || 'application/octet-stream';
         }
         return this.settings.types[type];
@@ -63,7 +63,7 @@ let Default = Default_1 = class Default {
         return (await Util.promisify(Fs.lstat)(path)).isFile();
     }
     /**
-     * Set the content of a default error file into the give output response.
+     * Sets the content of a default error file into the give output response.
      * @param output Output response.
      * @param status Output status.
      * @param information Error information.
@@ -91,7 +91,7 @@ let Default = Default_1 = class Default {
      */
     async setResponseFile(output, path) {
         const type = this.getMimeType(path);
-        const file = Path.join(this.settings.directory, Path.normalize(path));
+        const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
         if (!type || !(await this.fileExists(file))) {
             await this.setResponseError(output, 404, `File '${path}' could not be found`);
         }
@@ -112,29 +112,29 @@ let Default = Default_1 = class Default {
      * @param match Matched rote.
      */
     async defaultResponse(match) {
-        const path = match.detail.path === '/' ? Path.basename(this.settings.index) : Path.normalize(match.detail.path);
+        const path = match.detail.path === '/' ? Path.basename(this.settings.indexFile) : Path.normalize(match.detail.path);
         await this.setResponseFile(match.detail.output, path);
     }
     /**
-     * Get base directory.
+     * Gets the base directory.
      */
-    get directory() {
-        return this.settings.directory;
+    get baseDirectory() {
+        return this.settings.baseDirectory;
     }
     /**
-     * Get index file.
+     * Gets the index file.
      */
-    get index() {
-        return this.settings.index;
+    get indexFile() {
+        return this.settings.indexFile;
     }
     /**
-     * Get strict status.
+     * Gets the strict types status.
      */
-    get strict() {
-        return this.settings.strict || false;
+    get strictTypes() {
+        return this.settings.strictTypes || false;
     }
     /**
-     * Get handler types.
+     * Gets the handler types.
      */
     get types() {
         return this.settings.types;
@@ -172,13 +172,13 @@ __decorate([
 ], Default.prototype, "defaultResponse", null);
 __decorate([
     Class.Public()
-], Default.prototype, "directory", null);
+], Default.prototype, "baseDirectory", null);
 __decorate([
     Class.Public()
-], Default.prototype, "index", null);
+], Default.prototype, "indexFile", null);
 __decorate([
     Class.Public()
-], Default.prototype, "strict", null);
+], Default.prototype, "strictTypes", null);
 __decorate([
     Class.Public()
 ], Default.prototype, "types", null);

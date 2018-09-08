@@ -6,6 +6,8 @@ export { Match } from './types';
 export { Response } from './response';
 export { Input } from './input';
 export { Output } from './output';
+import * as LoggersModule from './loggers';
+export import Loggers = LoggersModule;
 import * as ServicesModule from './services';
 export import Services = ServicesModule;
 import * as HandlersModule from './handlers';
