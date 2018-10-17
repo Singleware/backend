@@ -65,14 +65,6 @@ let Main = Main_1 = class Main extends Application.Main {
         }
     }
     /**
-     * Gets the current timestamp value in seconds.
-     * @param increment Incremental seconds.
-     * @returns Returns the sum of current timestamp and the incremental seconds.
-     */
-    static getTimestamp(increment) {
-        return Math.trunc(new Date().getTime() / 1000) + increment;
-    }
-    /**
      * Set the CORS headers.
      * @param output Output information.
      * @param cors CORS information.
@@ -84,7 +76,7 @@ let Main = Main_1 = class Main extends Application.Main {
             'Access-Control-Allow-Credentials': cors.allowCredentials ? 'true' : 'false',
             'Access-Control-Allow-Headers': cors.allowHeaders,
             'Access-Control-Expose-Headers': cors.exposeHeaders,
-            'Access-Control-Max-Age': cors.maxAge !== void 0 ? `${Main_1.getTimestamp(cors.maxAge)}` : void 0
+            'Access-Control-Max-Age': cors.maxAge !== void 0 ? `${cors.maxAge}` : void 0
         });
     }
     /**
@@ -93,9 +85,11 @@ let Main = Main_1 = class Main extends Application.Main {
      * @param hsts HSTS information.
      */
     static setHSTS(output, hsts) {
-        const maxAge = Main_1.getTimestamp(hsts.maxAge);
-        const option = hsts.option ? `; ${hsts.option}` : '';
-        response_1.Response.setHeader(output, 'Strict-Transport-Security', `max-age=${maxAge}${option}`);
+        let value = `max-age=${hsts.maxAge}`;
+        if (hsts.option) {
+            value += `; ${hsts.option}`;
+        }
+        response_1.Response.setHeader(output, 'Strict-Transport-Security', value);
     }
 };
 __decorate([
@@ -107,9 +101,6 @@ __decorate([
 __decorate([
     Class.Protected()
 ], Main.prototype, "processHandler", null);
-__decorate([
-    Class.Protected()
-], Main, "getTimestamp", null);
 __decorate([
     Class.Protected()
 ], Main, "setCORS", null);

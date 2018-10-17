@@ -31,12 +31,6 @@ export declare class Main extends Application.Main<Input, Output> {
      */
     constructor(settings: Settings);
     /**
-     * Gets the current timestamp value in seconds.
-     * @param increment Incremental seconds.
-     * @returns Returns the sum of current timestamp and the incremental seconds.
-     */
-    protected static getTimestamp(increment: number): number;
-    /**
      * Set the CORS headers.
      * @param output Output information.
      * @param cors CORS information.
