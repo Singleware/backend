@@ -14,7 +14,7 @@ const Class = require("@singleware/class");
 /**
  * Back-end HTTP logger class.
  */
-let Console = class Console {
+let Console = class Console extends Class.Null {
     /**
      * Gets the request header from the specified request information.
      * @param type Header type.

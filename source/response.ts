@@ -12,7 +12,7 @@ import { Output } from './output';
  * Application response helper class.
  */
 @Class.Describe()
-export class Response {
+export class Response extends Class.Null {
   /**
    * Messages by status.
    */

@@ -16,7 +16,7 @@ const Class = require("@singleware/class");
 /**
  * Application response helper class.
  */
-let Response = Response_1 = class Response {
+let Response = Response_1 = class Response extends Class.Null {
     /**
      * Set a response header.
      * @param output Output information.

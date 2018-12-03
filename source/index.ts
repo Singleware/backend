@@ -7,20 +7,34 @@ export { Response } from './response';
 export { Input } from './input';
 export { Output } from './output';
 
-import * as LoggersModule from './loggers';
-export import Loggers = LoggersModule;
+import * as Loggers from './loggers';
+export import Loggers = Loggers;
 
-import * as ServicesModule from './services';
-export import Services = ServicesModule;
+import * as Services from './services';
+export import Services = Services;
 
-import * as HandlersModule from './handlers';
-export import Handlers = HandlersModule;
+import * as Handlers from './handlers';
+export import Handlers = Handlers;
 
-import * as MainModule from './main';
-export import Main = MainModule.Main;
+import * as Module from './main';
+export import Main = Module.Main;
 
-import { Main } from '@singleware/application';
+/**
+ * Declarations.
+ */
+import * as Application from '@singleware/application';
+import { MemberDecorator } from './types';
 
-// Aliases
-export const Filter = (<any>Main).Filter;
-export const Processor = (<any>Main).Processor;
+/**
+ * Decorates the specified member to filter an application request. (Alias for Main.Filter)
+ * @param action Filter action settings.
+ * @returns Returns the decorator method.
+ */
+export const Filter = (action: Application.Action): MemberDecorator => Application.Main.Filter(action);
+
+/**
+ * Decorates the specified member to process an application request. (Alias for Main.Processor)
+ * @param action Route action settings.
+ * @returns Returns the decorator method.
+ */
+export const Processor = (action: Application.Action): MemberDecorator => Application.Main.Processor(action);

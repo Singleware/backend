@@ -17,12 +17,13 @@ const Observable = require("@singleware/observable");
 /**
  * Back-end HTTP service class.
  */
-let Server = class Server {
+let Server = class Server extends Class.Null {
     /**
      * Default constructor.
      * @param settings Application settings.
      */
     constructor(settings) {
+        super();
         /**
          * Service events.
          */

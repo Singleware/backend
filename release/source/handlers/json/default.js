@@ -16,12 +16,13 @@ const response_1 = require("../../response");
 /**
  * Default JSON handler class.
  */
-let Default = class Default {
+let Default = class Default extends Class.Null {
     /**
      * Default constructor.
      * @param settings Handler settings.
      */
     constructor(settings) {
+        super();
         this.settings = settings;
     }
     /**

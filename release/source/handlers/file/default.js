@@ -21,12 +21,13 @@ const response_1 = require("../../response");
 /**
  * Default file handler class.
  */
-let Default = Default_1 = class Default {
+let Default = Default_1 = class Default extends Class.Null {
     /**
      * Default constructor.
      * @param settings Handler settings.
      */
     constructor(settings) {
+        super();
         this.settings = settings;
     }
     /**

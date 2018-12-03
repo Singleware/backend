@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import * as Class from '@singleware/class';
 import { MIMEs } from '../../mimes';
 import { Output } from '../../output';
 import { Match } from '../../types';
@@ -6,7 +7,7 @@ import { Settings } from './settings';
 /**
  * Default file handler class.
  */
-export declare class Default {
+export declare class Default extends Class.Null {
     /**
      * Handler settings.
      */

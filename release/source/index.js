@@ -2,15 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var response_1 = require("./response");
 exports.Response = response_1.Response;
-const LoggersModule = require("./loggers");
-exports.Loggers = LoggersModule;
-const ServicesModule = require("./services");
-exports.Services = ServicesModule;
-const HandlersModule = require("./handlers");
-exports.Handlers = HandlersModule;
-const MainModule = require("./main");
-exports.Main = MainModule.Main;
-const application_1 = require("@singleware/application");
-// Aliases
-exports.Filter = application_1.Main.Filter;
-exports.Processor = application_1.Main.Processor;
+const Loggers = require("./loggers");
+exports.Loggers = Loggers;
+const Services = require("./services");
+exports.Services = Services;
+const Handlers = require("./handlers");
+exports.Handlers = Handlers;
+const Module = require("./main");
+exports.Main = Module.Main;
+/**
+ * Declarations.
+ */
+const Application = require("@singleware/application");
+/**
+ * Decorates the specified member to filter an application request. (Alias for Main.Filter)
+ * @param action Filter action settings.
+ * @returns Returns the decorator method.
+ */
+exports.Filter = (action) => Application.Main.Filter(action);
+/**
+ * Decorates the specified member to process an application request. (Alias for Main.Processor)
+ * @param action Route action settings.
+ * @returns Returns the decorator method.
+ */
+exports.Processor = (action) => Application.Main.Processor(action);

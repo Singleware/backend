@@ -11,7 +11,12 @@ import { Output } from './output';
 /**
  * Type declaration for callable members.
  */
-export type Callable<T = any> = Class.Callable<T>;
+export type Callable<T = any> = Class.Callable;
+
+/**
+ * Type declaration for member decorators.
+ */
+export type MemberDecorator = <T>(target: Object, property: string | symbol, descriptor?: TypedPropertyDescriptor<T>) => any;
 
 /**
  * Type declaration for application route match.

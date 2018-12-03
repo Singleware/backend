@@ -7,30 +7,28 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.1.5",
+  "version": "1.1.10",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
-    "backend",
-    "application",
-    "empty project",
-    "project"
+    "backend application",
+    "empty backend project"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/singleware/backend"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
-    "@singleware/application": "^1.1.4",
-    "@singleware/class": "^1.1.11",
-    "@singleware/observable": "^1.0.19"
+    "@singleware/application": "^1.1.8",
+    "@singleware/class": "^1.1.14",
+    "@singleware/observable": "^1.0.21"
   },
   "devDependencies": {
-    "@types/node": "^10.10.3",
-    "prettier": "^1.14.3",
+    "@types/node": "^10.12.11",
+    "prettier": "^1.15.3",
     "typescript": "^2.9.2"
   },
   "prettier": {

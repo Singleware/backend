@@ -13,7 +13,7 @@ import { Settings } from './settings';
  * Default JSON handler class.
  */
 @Class.Describe()
-export class Default {
+export class Default extends Class.Null {
   /**
    * Handler settings.
    */
@@ -24,6 +24,7 @@ export class Default {
    * @param settings Handler settings.
    */
   constructor(settings: Settings) {
+    super();
     this.settings = settings;
   }
 

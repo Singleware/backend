@@ -1,8 +1,13 @@
+/**
+ * Copyright (C) 2018 Silas B. Domingos
+ * This source code is licensed under the MIT License as described in the file LICENSE.
+ */
+import * as Class from '@singleware/class';
 import { Request, Logger } from '../types';
 /**
  * Back-end HTTP logger class.
  */
-export declare class Console implements Logger {
+export declare class Console extends Class.Null implements Logger {
     /**
      * Gets the request header from the specified request information.
      * @param type Header type.

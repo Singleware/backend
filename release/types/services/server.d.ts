@@ -1,10 +1,11 @@
+import * as Class from '@singleware/class';
 import * as Observable from '@singleware/observable';
 import { Request, Service } from '../types';
 import { Settings } from './settings';
 /**
  * Back-end HTTP service class.
  */
-export declare class Server implements Service {
+export declare class Server extends Class.Null implements Service {
     /**
      * HTTP server.
      */

@@ -17,7 +17,7 @@ import { Settings } from './settings';
  * Back-end HTTP service class.
  */
 @Class.Describe()
-export class Server implements Service {
+export class Server extends Class.Null implements Service {
   /**
    * HTTP server.
    */
@@ -111,6 +111,7 @@ export class Server implements Service {
    * @param settings Application settings.
    */
   constructor(settings: Settings) {
+    super();
     this.settings = settings;
     this.server = Http.createServer(this.requestHandler.bind(this));
   }

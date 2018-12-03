@@ -10,7 +10,7 @@ import { Request, Logger } from '../types';
  * Back-end HTTP logger class.
  */
 @Class.Describe()
-export class Console implements Logger {
+export class Console extends Class.Null implements Logger {
   /**
    * Gets the request header from the specified request information.
    * @param type Header type.
