@@ -14,7 +14,7 @@ var Main_1;
  */
 const Class = require("@singleware/class");
 const Application = require("@singleware/application");
-const response_1 = require("./response");
+const Response = require("./services/response");
 /**
  * Back-end application class.
  */
@@ -58,7 +58,7 @@ let Main = Main_1 = class Main extends Application.Main {
             await super.processHandler(match, callback);
         }
         else if (input.method === 'OPTIONS') {
-            response_1.Response.setStatus(output, 204);
+            Response.Helper.setStatus(output, 204);
         }
         else {
             await match.next();
@@ -70,7 +70,7 @@ let Main = Main_1 = class Main extends Application.Main {
      * @param cors CORS information.
      */
     static setCORS(output, input, cors) {
-        response_1.Response.setMultiHeaders(output, {
+        Response.Helper.setMultiHeaders(output, {
             'Access-Control-Allow-Origin': cors.allowOrigin || input.headers['origin'],
             'Access-Control-Allow-Methods': cors.allowMethods || ['HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
             'Access-Control-Allow-Credentials': cors.allowCredentials ? 'true' : 'false',
@@ -89,7 +89,7 @@ let Main = Main_1 = class Main extends Application.Main {
         if (hsts.option) {
             value += `; ${hsts.option}`;
         }
-        response_1.Response.setHeader(output, 'Strict-Transport-Security', value);
+        Response.Helper.setHeader(output, 'Strict-Transport-Security', value);
     }
 };
 __decorate([

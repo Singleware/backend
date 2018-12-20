@@ -10,8 +10,10 @@ import * as Class from '@singleware/class';
 import * as Observable from '@singleware/observable';
 
 import { Request, Service } from '../types';
-import { Headers } from '../headers';
 import { Settings } from './settings';
+import { Headers } from './headers';
+import { Search } from './request';
+import { Helper } from './request';
 
 /**
  * Back-end HTTP service class.
@@ -42,19 +44,21 @@ export class Server extends Class.Null implements Service {
 
   /**
    * Create an unprocessed request with the specified parameters.
-   * @param path Request path
-   * @param method Request method.
    * @param address Request address.
+   * @param method Request method.
+   * @param path Request path
+   * @param search Request search parameters.
    * @param headers Request headers.
    * @returns Returns the created request object.
    */
   @Class.Private()
-  private createRequest(path: string, method: string, address: string, headers: Headers): Request {
+  private createRequest(address: string, method: string, path: string, search: Search, headers: Headers): Request {
     return {
       path: path,
       input: {
-        method: method,
         address: address,
+        method: method,
+        search: search,
         headers: headers,
         data: ''
       },
@@ -75,10 +79,12 @@ export class Server extends Class.Null implements Service {
    */
   @Class.Private()
   private requestHandler(incoming: Http.IncomingMessage, response: Http.ServerResponse): void {
-    const path = Url.parse(incoming.url || '/').pathname || '/';
-    const method = (incoming.method || 'GET').toUpperCase();
+    const url = Url.parse(incoming.url || '/');
     const address = (<Net.AddressInfo>incoming.connection.address()).address;
-    const request = this.createRequest(path, method, address, incoming.headers);
+    const method = (incoming.method || 'GET').toUpperCase();
+    const path = url.pathname || '/';
+    const search = Helper.getSearchMap(url.search || '');
+    const request = this.createRequest(address, method, path, search, incoming.headers);
     incoming.on('data', (chunk: string) => (request.input.data += chunk));
     incoming.on('end', () => this.responseHandler(request, response));
   }
@@ -96,7 +102,7 @@ export class Server extends Class.Null implements Service {
       const input = request.input;
       request.environment.exception = exception;
       await this.events.error.notifyAll(request);
-      request = this.createRequest('!', input.method, input.address, input.headers);
+      request = this.createRequest(input.address, input.method, '!', {} as any, input.headers);
       request.environment.exception = this.settings.debug ? exception.stack : exception.message;
       await this.events.receive.notifyAll(request);
     } finally {

@@ -17,7 +17,7 @@ const Path = require("path");
 const Util = require("util");
 const Class = require("@singleware/class");
 const Application = require("@singleware/application");
-const response_1 = require("../../response");
+const Response = require("../../services/response");
 /**
  * Default file handler class.
  */
@@ -71,7 +71,7 @@ let Default = Default_1 = class Default extends Class.Null {
      */
     async setResponseError(output, status, information) {
         const path = Path.join(Default_1.assetsPath, `${status}.html`);
-        response_1.Response.setStatus(output, status);
+        Response.Helper.setStatus(output, status);
         if (await this.fileExists(path)) {
             const variables = {
                 '%STATUS%': status.toString(),
@@ -82,7 +82,7 @@ let Default = Default_1 = class Default extends Class.Null {
             const template = (await this.readFile(path)).toString('utf-8');
             const content = template.replace(replacement, (match) => variables[match]);
             const type = this.settings.types.html || 'text/html';
-            response_1.Response.setContent(output, content, type);
+            Response.Helper.setContent(output, content, type);
         }
     }
     /**
@@ -97,8 +97,8 @@ let Default = Default_1 = class Default extends Class.Null {
             await this.setResponseError(output, 404, `File '${path}' could not be found`);
         }
         else {
-            response_1.Response.setStatus(output, 200);
-            response_1.Response.setContent(output, await this.readFile(file), type);
+            Response.Helper.setStatus(output, 200);
+            Response.Helper.setContent(output, await this.readFile(file), type);
         }
     }
     /**

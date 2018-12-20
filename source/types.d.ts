@@ -5,8 +5,8 @@
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import { Input } from './input';
-import { Output } from './output';
+import * as Request from './services/request';
+import * as Response from './services/response';
 
 /**
  * Type declaration for callable members.
@@ -21,7 +21,7 @@ export type MemberDecorator = <T>(target: Object, property: string | symbol, des
 /**
  * Type declaration for application route match.
  */
-export type Match = Application.Match<Input, Output>;
+export type Match = Application.Match<Request.Input, Response.Output>;
 
 /**
  * Type declaration for application route variables.
@@ -31,14 +31,14 @@ export type Variables = Application.Variables;
 /**
  * Type declaration for application request.
  */
-export type Request = Application.Request<Input, Output>;
+export type Request = Application.Request<Request.Input, Response.Output>;
 
 /**
  * Type declaration for application service.
  */
-export type Service = Application.Service<Input, Output>;
+export type Service = Application.Service<Request.Input, Response.Output>;
 
 /**
  * Type declaration for application logger.
  */
-export type Logger = Application.Logger<Input, Output>;
+export type Logger = Application.Logger<Request.Input, Response.Output>;

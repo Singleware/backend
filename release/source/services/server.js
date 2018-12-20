@@ -14,6 +14,7 @@ const Http = require("http");
 const Url = require("url");
 const Class = require("@singleware/class");
 const Observable = require("@singleware/observable");
+const request_1 = require("./request");
 /**
  * Back-end HTTP service class.
  */
@@ -37,18 +38,20 @@ let Server = class Server extends Class.Null {
     }
     /**
      * Create an unprocessed request with the specified parameters.
-     * @param path Request path
-     * @param method Request method.
      * @param address Request address.
+     * @param method Request method.
+     * @param path Request path
+     * @param search Request search parameters.
      * @param headers Request headers.
      * @returns Returns the created request object.
      */
-    createRequest(path, method, address, headers) {
+    createRequest(address, method, path, search, headers) {
         return {
             path: path,
             input: {
-                method: method,
                 address: address,
+                method: method,
+                search: search,
                 headers: headers,
                 data: ''
             },
@@ -67,10 +70,12 @@ let Server = class Server extends Class.Null {
      * @param response Response message.
      */
     requestHandler(incoming, response) {
-        const path = Url.parse(incoming.url || '/').pathname || '/';
-        const method = (incoming.method || 'GET').toUpperCase();
+        const url = Url.parse(incoming.url || '/');
         const address = incoming.connection.address().address;
-        const request = this.createRequest(path, method, address, incoming.headers);
+        const method = (incoming.method || 'GET').toUpperCase();
+        const path = url.pathname || '/';
+        const search = request_1.Helper.getSearchMap(url.search || '');
+        const request = this.createRequest(address, method, path, search, incoming.headers);
         incoming.on('data', (chunk) => (request.input.data += chunk));
         incoming.on('end', () => this.responseHandler(request, response));
     }
@@ -87,7 +92,7 @@ let Server = class Server extends Class.Null {
             const input = request.input;
             request.environment.exception = exception;
             await this.events.error.notifyAll(request);
-            request = this.createRequest('!', input.method, input.address, input.headers);
+            request = this.createRequest(input.address, input.method, '!', {}, input.headers);
             request.environment.exception = this.settings.debug ? exception.stack : exception.message;
             await this.events.receive.notifyAll(request);
         }

@@ -4,8 +4,8 @@
  */
 
 /**
- * Application MIME types map interface.
+ * Request search interface.
  */
-export interface MIMEs {
-  [extension: string]: string;
+export interface Search {
+  [name: string]: string | string[];
 }

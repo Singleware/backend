@@ -4,7 +4,7 @@
  */
 
 /**
- * HTTP Content Security Policy headers interface.
+ * HTTP Strict Transport Security headers.
  */
 export interface HSTS {
   /**

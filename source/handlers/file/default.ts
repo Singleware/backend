@@ -9,10 +9,9 @@ import * as Util from 'util';
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import { MIMEs } from '../../mimes';
-import { Output } from '../../output';
+import * as Response from '../../services/response';
 import { Match } from '../../types';
-import { Response } from '../../response';
+
 import { Settings } from './settings';
 
 /**
@@ -20,6 +19,12 @@ import { Settings } from './settings';
  */
 @Class.Describe()
 export class Default extends Class.Null {
+  /**
+   * Assets path.
+   */
+  @Class.Private()
+  private static assetsPath: string = Path.join(__dirname, '../../../../assets/');
+
   /**
    * Handler settings.
    */
@@ -72,9 +77,9 @@ export class Default extends Class.Null {
    * @param information Error information.
    */
   @Class.Protected()
-  protected async setResponseError(output: Output, status: number, information: string): Promise<void> {
+  protected async setResponseError(output: Response.Output, status: number, information: string): Promise<void> {
     const path = Path.join(Default.assetsPath, `${status}.html`);
-    Response.setStatus(output, status);
+    Response.Helper.setStatus(output, status);
     if (await this.fileExists(path)) {
       const variables = {
         '%STATUS%': status.toString(),
@@ -85,7 +90,7 @@ export class Default extends Class.Null {
       const template = (await this.readFile(path)).toString('utf-8');
       const content = template.replace(replacement, (match: string) => (<any>variables)[match]);
       const type = this.settings.types.html || 'text/html';
-      Response.setContent(output, content, type);
+      Response.Helper.setContent(output, content, type);
     }
   }
 
@@ -95,14 +100,14 @@ export class Default extends Class.Null {
    * @param path File path.
    */
   @Class.Protected()
-  protected async setResponseFile(output: Output, path: string): Promise<void> {
+  protected async setResponseFile(output: Response.Output, path: string): Promise<void> {
     const type = this.getMimeType(path);
     const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
     if (!type || !(await this.fileExists(file))) {
       await this.setResponseError(output, 404, `File '${path}' could not be found`);
     } else {
-      Response.setStatus(output, 200);
-      Response.setContent(output, await this.readFile(file), type);
+      Response.Helper.setStatus(output, 200);
+      Response.Helper.setContent(output, await this.readFile(file), type);
     }
   }
 
@@ -164,13 +169,7 @@ export class Default extends Class.Null {
    * Gets the handler types.
    */
   @Class.Public()
-  public get types(): MIMEs {
+  public get types(): Response.Types {
     return this.settings.types;
   }
-
-  /**
-   * Assets path.
-   */
-  @Class.Private()
-  private static assetsPath: string = Path.join(__dirname, '../../../../assets/');
 }

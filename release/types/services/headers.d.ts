@@ -4,7 +4,7 @@
  */
 
 /**
- * Application headers interface.
+ * Service headers interface.
  */
 export interface Headers {
   [name: string]: string | string[] | undefined;

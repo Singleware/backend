@@ -3,15 +3,15 @@
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 export { Match } from './types';
-export { Response } from './response';
-export { Input } from './input';
-export { Output } from './output';
-
-import * as Loggers from './loggers';
-export import Loggers = Loggers;
 
 import * as Services from './services';
 export import Services = Services;
+export import Response = Services.Response.Helper;
+export import Input = Services.Request.Input;
+export import Output = Services.Response.Output;
+
+import * as Loggers from './loggers';
+export import Loggers = Loggers;
 
 import * as Handlers from './handlers';
 export import Handlers = Handlers;

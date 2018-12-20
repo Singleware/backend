@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -40,11 +40,15 @@
   "scripts": {
     "build": "npm run make && npm run update",
     "make": "tsc",
-    "update": "cp -Rf ./source/*.d.ts ./release/types && npm run update-handlers && npm run update-services && npm run update-security",
-    "update-handlers": "npm run update-file-handler && npm run update-json-handler",
-    "update-services": "cp -Rf ./source/services/*.d.ts ./release/types/services",
+    "update": "npm run update-base && npm run update-handlers && npm run update-services && npm run update-security",
+    "update-base": "cp -Rf ./source/*.d.ts ./release/types",
+    "update-services": "npm run update-services-base && npm run update-services-request && npm run update-services-response",
+    "update-services-base": "cp -Rf ./source/services/*.d.ts ./release/types/services",
+    "update-services-request": "cp -Rf ./source/services/request/*.d.ts ./release/types/services/request",
+    "update-services-response": "cp -Rf ./source/services/response/*.d.ts ./release/types/services/response",
     "update-security": "cp -Rf ./source/security/*.d.ts ./release/types/security",
-    "update-file-handler": "cp -Rf ./source/handlers/file/*.d.ts ./release/types/handlers/file",
-    "update-json-handler": "cp -Rf ./source/handlers/json/*.d.ts ./release/types/handlers/json"
+    "update-handlers": "npm run update-handlers-file && npm run update-handlers-json",
+    "update-handlers-file": "cp -Rf ./source/handlers/file/*.d.ts ./release/types/handlers/file",
+    "update-handlers-json": "cp -Rf ./source/handlers/json/*.d.ts ./release/types/handlers/json"
   }
 }

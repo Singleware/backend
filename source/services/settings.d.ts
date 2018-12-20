@@ -4,7 +4,7 @@
  */
 
 /**
- * Application service settings.
+ * Service settings interface.
  */
 export interface Settings {
   /**

@@ -6,20 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Response_1;
-"use strict";
 /**
  * Copyright (C) 2018 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
 /**
- * Application response helper class.
+ * Response helper class.
  */
-let Response = Response_1 = class Response extends Class.Null {
+let Helper = class Helper extends Class.Null {
     /**
      * Set a response header.
-     * @param output Output information.
+     * @param output Output entity.
      * @param name Header name.
      * @param value Header value.
      */
@@ -28,73 +26,73 @@ let Response = Response_1 = class Response extends Class.Null {
     }
     /**
      * Set multi response headers.
-     * @param output Output information.
+     * @param output Output entity.
      * @param headers Headers to be set.
      */
     static setMultiHeaders(output, headers) {
         for (const name in headers) {
             const header = headers[name];
             if (header !== void 0 && header.length > 0) {
-                Response_1.setHeader(output, name, header);
+                this.setHeader(output, name, header);
             }
         }
     }
     /**
      * Set the response status.
-     * @param output Output information.
+     * @param output Output entity.
      * @param status Status code.
      */
     static setStatus(output, status) {
-        if (!Response_1.messages[status]) {
+        if (!this.messages[status]) {
             throw new TypeError(`Nonexistent status '${status}' can't be set.`);
         }
-        output.message = Response_1.messages[status];
+        output.message = this.messages[status];
         output.status = status;
     }
     /**
      * Set the response content.
-     * @param output Output information.
+     * @param output Output entity.
      * @param data Output data.
-     * @param mime Output MIME type.
+     * @param type Output MIME type.
      */
-    static setContent(output, data, mime) {
-        Response_1.setHeader(output, 'Content-Type', mime || 'application/octet-stream');
+    static setContent(output, data, type) {
+        this.setHeader(output, 'Content-Type', type || 'application/octet-stream');
         output.data = data;
     }
     /**
      * Set the response content attachment.
-     * @param output Output information.
+     * @param output Output entity.
      * @param name Downloaded file name.
      * @param data Output data to download.
-     * @param mime Output MIME type.
+     * @param type Output MIME type.
      */
-    static setContentAttachment(output, name, data, mime) {
-        Response_1.setHeader(output, 'Content-Disposition', `attachment filename='${name}'`);
-        Response_1.setContent(output, data, mime);
+    static setContentAttachment(output, name, data, type) {
+        this.setHeader(output, 'Content-Disposition', `attachment filename='${name}'`);
+        this.setContent(output, data, type);
     }
     /**
      * Set the response content JSON.
-     * @param output Output information.
+     * @param output Output entity.
      * @param content Output content.
      */
     static setContentJson(output, content) {
-        Response_1.setContent(output, JSON.stringify(content), 'application/json');
+        this.setContent(output, JSON.stringify(content), 'application/json');
     }
     /**
      * Set the response status and the response content JSON.
-     * @param output Output information.
+     * @param output Output entity.
      * @param status Output status.
      * @param message Output message.
      */
     static setStatusJson(output, status, message) {
-        Response_1.setStatus(output, status);
-        Response_1.setContentJson(output, { status: status, message: message || Response_1.messages[status] || '' });
+        this.setStatus(output, status);
+        this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
     }
 };
 /**
  * Messages by status.
  */
-Response.messages = {
+Helper.messages = {
     100: 'Continue',
     101: 'Switching Protocols',
     102: 'Processing',
@@ -161,29 +159,29 @@ Response.messages = {
 };
 __decorate([
     Class.Private()
-], Response, "messages", void 0);
+], Helper, "messages", void 0);
 __decorate([
     Class.Public()
-], Response, "setHeader", null);
+], Helper, "setHeader", null);
 __decorate([
     Class.Public()
-], Response, "setMultiHeaders", null);
+], Helper, "setMultiHeaders", null);
 __decorate([
     Class.Public()
-], Response, "setStatus", null);
+], Helper, "setStatus", null);
 __decorate([
     Class.Public()
-], Response, "setContent", null);
+], Helper, "setContent", null);
 __decorate([
     Class.Public()
-], Response, "setContentAttachment", null);
+], Helper, "setContentAttachment", null);
 __decorate([
     Class.Public()
-], Response, "setContentJson", null);
+], Helper, "setContentJson", null);
 __decorate([
     Class.Public()
-], Response, "setStatusJson", null);
-Response = Response_1 = __decorate([
+], Helper, "setStatusJson", null);
+Helper = __decorate([
     Class.Describe()
-], Response);
-exports.Response = Response;
+], Helper);
+exports.Helper = Helper;

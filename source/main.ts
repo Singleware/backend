@@ -6,17 +6,17 @@ import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
 import * as Security from './security';
+import * as Response from './services/response';
+import * as Request from './services/request';
+
 import { Callable, Variables } from './types';
 import { Settings } from './settings';
-import { Response } from './response';
-import { Input } from './input';
-import { Output } from './output';
 
 /**
  * Back-end application class.
  */
 @Class.Describe()
-export class Main extends Application.Main<Input, Output> {
+export class Main extends Application.Main<Request.Input, Response.Output> {
   /**
    * Application settings.
    */
@@ -30,7 +30,7 @@ export class Main extends Application.Main<Input, Output> {
    * @param variables Route variables.
    */
   @Class.Protected()
-  protected setSecurityHeaders(output: Output, input: Input, variables: Variables): void {
+  protected setSecurityHeaders(output: Response.Output, input: Request.Input, variables: Variables): void {
     if (this.settings.CrossOriginRequestSharing || variables.CORS) {
       Main.setCORS(output, input, { ...this.settings.CrossOriginRequestSharing, ...variables.CORS });
     }
@@ -45,7 +45,7 @@ export class Main extends Application.Main<Input, Output> {
    * @param callback Handler callback.
    */
   @Class.Protected()
-  protected async processHandler(match: Application.Match<Input, Output>, callback: Callable): Promise<void> {
+  protected async processHandler(match: Application.Match<Request.Input, Response.Output>, callback: Callable): Promise<void> {
     const methods = match.variables.methods;
     const output = match.detail.output;
     const input = match.detail.input;
@@ -53,7 +53,7 @@ export class Main extends Application.Main<Input, Output> {
     if ((methods instanceof Array && methods.indexOf(input.method) !== -1) || methods === input.method || methods === '*') {
       await super.processHandler(match, callback);
     } else if (input.method === 'OPTIONS') {
-      Response.setStatus(output, 204);
+      Response.Helper.setStatus(output, 204);
     } else {
       await match.next();
     }
@@ -77,8 +77,8 @@ export class Main extends Application.Main<Input, Output> {
    * @param cors CORS information.
    */
   @Class.Protected()
-  protected static setCORS(output: Output, input: Input, cors: Security.CORS): void {
-    Response.setMultiHeaders(output, {
+  protected static setCORS(output: Response.Output, input: Request.Input, cors: Security.CORS): void {
+    Response.Helper.setMultiHeaders(output, {
       'Access-Control-Allow-Origin': cors.allowOrigin || <string>input.headers['origin'],
       'Access-Control-Allow-Methods': cors.allowMethods || ['HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       'Access-Control-Allow-Credentials': cors.allowCredentials ? 'true' : 'false',
@@ -94,11 +94,11 @@ export class Main extends Application.Main<Input, Output> {
    * @param hsts HSTS information.
    */
   @Class.Protected()
-  protected static setHSTS(output: Output, hsts: Security.HSTS): void {
+  protected static setHSTS(output: Response.Output, hsts: Security.HSTS): void {
     let value = `max-age=${hsts.maxAge}`;
     if (hsts.option) {
       value += `; ${hsts.option}`;
     }
-    Response.setHeader(output, 'Strict-Transport-Security', value);
+    Response.Helper.setHeader(output, 'Strict-Transport-Security', value);
   }
 }

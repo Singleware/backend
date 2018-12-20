@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var response_1 = require("./response");
-exports.Response = response_1.Response;
-const Loggers = require("./loggers");
-exports.Loggers = Loggers;
 const Services = require("./services");
 exports.Services = Services;
+exports.Response = Services.Response.Helper;
+const Loggers = require("./loggers");
+exports.Loggers = Loggers;
 const Handlers = require("./handlers");
 exports.Handlers = Handlers;
 const Module = require("./main");

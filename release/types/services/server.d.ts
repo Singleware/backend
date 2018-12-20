@@ -20,9 +20,10 @@ export declare class Server extends Class.Null implements Service {
     private events;
     /**
      * Create an unprocessed request with the specified parameters.
-     * @param path Request path
-     * @param method Request method.
      * @param address Request address.
+     * @param method Request method.
+     * @param path Request path
+     * @param search Request search parameters.
      * @param headers Request headers.
      * @returns Returns the created request object.
      */
