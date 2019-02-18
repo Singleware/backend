@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import * as Class from '@singleware/class';
 import * as Response from '../../services/response';
 import { Match } from '../../types';

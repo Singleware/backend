@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.1.12",
+  "version": "1.1.14",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -27,7 +27,7 @@
     "@singleware/observable": "^1.0.21"
   },
   "devDependencies": {
-    "@types/node": "^10.12.23",
+    "@types/node": "^10.12.26",
     "prettier": "^1.16.4",
     "typescript": "^2.9.2"
   },
@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "npm run make && npm run update",
-    "make": "tsc",
+    "make": "npx tsc -p ./source",
     "update": "npm run update-base && npm run update-handlers && npm run update-services && npm run update-security",
     "update-base": "cp -Rf ./source/*.d.ts ./release/types",
     "update-services": "npm run update-services-base && npm run update-services-request && npm run update-services-response",

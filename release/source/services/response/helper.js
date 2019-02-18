@@ -56,8 +56,11 @@ let Helper = class Helper extends Class.Null {
      * @param type Output MIME type.
      */
     static setContent(output, data, type) {
-        this.setHeader(output, 'Content-Type', type || 'application/octet-stream');
-        output.data = data;
+        output.data = data instanceof Buffer ? data : Buffer.from(data, 'utf-8');
+        this.setMultiHeaders(output, {
+            'Content-Length': output.data.byteLength.toString(),
+            'Content-Type': type || 'application/octet-stream'
+        });
     }
     /**
      * Set the response content attachment.
@@ -86,7 +89,10 @@ let Helper = class Helper extends Class.Null {
      */
     static setStatusJson(output, status, message) {
         this.setStatus(output, status);
-        this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+        this.setContentJson(output, {
+            status: status,
+            message: message || this.messages[status] || ''
+        });
     }
 };
 /**

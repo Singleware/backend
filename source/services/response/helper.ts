@@ -131,8 +131,11 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static setContent(output: Output, data: string | Buffer, type?: string): void {
-    this.setHeader(output, 'Content-Type', type || 'application/octet-stream');
-    output.data = data;
+    output.data = data instanceof Buffer ? data : Buffer.from(data, 'utf-8');
+    this.setMultiHeaders(output, {
+      'Content-Length': output.data.byteLength.toString(),
+      'Content-Type': type || 'application/octet-stream'
+    });
   }
 
   /**
@@ -167,6 +170,9 @@ export class Helper extends Class.Null {
   @Class.Public()
   public static setStatusJson(output: Output, status: number, message?: string): void {
     this.setStatus(output, status);
-    this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+    this.setContentJson(output, {
+      status: status,
+      message: message || this.messages[status] || ''
+    });
   }
 }
