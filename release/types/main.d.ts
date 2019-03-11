@@ -25,6 +25,13 @@ export declare class Main extends Application.Main<Request.Input, Response.Outpu
      */
     private setResponseHeaders;
     /**
+     * Filter handler to be inherited and extended.
+     * @param match Match information.
+     * @param allowed Determine whether the filter is allowing the request matching or not.
+     * @returns Returns true when the filter handler still allows the request matching or false otherwise.
+     */
+    protected filterHandler(match: Types.Match, allowed: boolean): Promise<boolean>;
+    /**
      * Process event handler.
      * @param match Matched routes.
      * @param callback Handler callback.

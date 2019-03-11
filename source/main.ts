@@ -42,10 +42,10 @@ export class Main extends Application.Main<Request.Input, Response.Output> {
    */
   @Class.Private()
   private setResponseHeaders(request: Types.Request, variables: Environment): void {
-    if (this.settings.contentSecurityPolice || variables.contentSecurityPolice) {
+    if (this.settings.contentSecurityPolicy || variables.contentSecurityPolicy) {
       Security.CSP.Helper.setHeaders(request, <Security.CSP.Settings>{
-        ...this.settings.contentSecurityPolice,
-        ...variables.contentSecurityPolice
+        ...this.settings.contentSecurityPolicy,
+        ...variables.contentSecurityPolicy
       });
     }
     if (this.settings.crossOriginRequestSharing || variables.crossOriginRequestSharing) {
@@ -60,6 +60,20 @@ export class Main extends Application.Main<Request.Input, Response.Output> {
         ...variables.httpStrictTransportSecurity
       });
     }
+  }
+
+  /**
+   * Filter handler to be inherited and extended.
+   * @param match Match information.
+   * @param allowed Determine whether the filter is allowing the request matching or not.
+   * @returns Returns true when the filter handler still allows the request matching or false otherwise.
+   */
+  @Class.Protected()
+  protected async filterHandler(match: Types.Match, allowed: boolean): Promise<boolean> {
+    if (!allowed) {
+      this.setResponseHeaders(match.detail, <Environment>match.variables);
+    }
+    return allowed;
   }
 
   /**

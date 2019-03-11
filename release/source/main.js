@@ -41,10 +41,10 @@ let Main = class Main extends Application.Main {
      * @param variables Route variables.
      */
     setResponseHeaders(request, variables) {
-        if (this.settings.contentSecurityPolice || variables.contentSecurityPolice) {
+        if (this.settings.contentSecurityPolicy || variables.contentSecurityPolicy) {
             Security.CSP.Helper.setHeaders(request, {
-                ...this.settings.contentSecurityPolice,
-                ...variables.contentSecurityPolice
+                ...this.settings.contentSecurityPolicy,
+                ...variables.contentSecurityPolicy
             });
         }
         if (this.settings.crossOriginRequestSharing || variables.crossOriginRequestSharing) {
@@ -59,6 +59,18 @@ let Main = class Main extends Application.Main {
                 ...variables.httpStrictTransportSecurity
             });
         }
+    }
+    /**
+     * Filter handler to be inherited and extended.
+     * @param match Match information.
+     * @param allowed Determine whether the filter is allowing the request matching or not.
+     * @returns Returns true when the filter handler still allows the request matching or false otherwise.
+     */
+    async filterHandler(match, allowed) {
+        if (!allowed) {
+            this.setResponseHeaders(match.detail, match.variables);
+        }
+        return allowed;
     }
     /**
      * Process event handler.
@@ -85,6 +97,9 @@ __decorate([
 __decorate([
     Class.Private()
 ], Main.prototype, "setResponseHeaders", null);
+__decorate([
+    Class.Protected()
+], Main.prototype, "filterHandler", null);
 __decorate([
     Class.Protected()
 ], Main.prototype, "processHandler", null);

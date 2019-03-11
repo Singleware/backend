@@ -9,9 +9,9 @@ import * as Security from './security';
  */
 export interface Settings {
   /**
-   * Default settings for Content Security Police.
+   * Default settings for Content Security Policy.
    */
-  contentSecurityPolice?: Security.CSP.Settings;
+  contentSecurityPolicy?: Security.CSP.Settings;
   /**
    * Default settings for Cross-Origin Request Sharing.
    */

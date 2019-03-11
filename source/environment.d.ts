@@ -17,9 +17,9 @@ export interface Environment extends Application.Variables {
    */
   methods: string | string[];
   /**
-   * Settings for Content Security Police in this action.
+   * Settings for Content Security Policy in this action.
    */
-  contentSecurityPolice?: CSP.Settings;
+  contentSecurityPolicy?: CSP.Settings;
   /**
    * Settings for Cross-Origin Request Sharing in this action.
    */
