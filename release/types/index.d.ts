@@ -8,6 +8,8 @@ import * as Loggers from './loggers';
 export import Loggers = Loggers;
 import * as Handlers from './handlers';
 export import Handlers = Handlers;
+import * as Security from './security';
+export import Security = Security;
 import * as Module from './main';
 export import Main = Module.Main;
 import { MemberDecorator } from './types';

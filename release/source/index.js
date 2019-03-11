@@ -7,6 +7,8 @@ const Loggers = require("./loggers");
 exports.Loggers = Loggers;
 const Handlers = require("./handlers");
 exports.Handlers = Handlers;
+const Security = require("./security");
+exports.Security = Security;
 const Module = require("./main");
 exports.Main = Module.Main;
 /**
