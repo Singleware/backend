@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
@@ -16,7 +16,7 @@ const Class = require("@singleware/class");
  */
 let Helper = class Helper extends Class.Null {
     /**
-     * Set a response header.
+     * Set one response header.
      * @param output Output entity.
      * @param name Header name.
      * @param value Header value.
@@ -25,14 +25,14 @@ let Helper = class Helper extends Class.Null {
         output.headers[name] = value;
     }
     /**
-     * Set multi response headers.
+     * Set multiple response headers.
      * @param output Output entity.
      * @param headers Headers to be set.
      */
-    static setMultiHeaders(output, headers) {
+    static setMultipleHeaders(output, headers) {
         for (const name in headers) {
             const header = headers[name];
-            if (header !== void 0 && header.length > 0) {
+            if (header !== void 0) {
                 this.setHeader(output, name, header);
             }
         }
@@ -41,24 +41,32 @@ let Helper = class Helper extends Class.Null {
      * Set the response status.
      * @param output Output entity.
      * @param status Status code.
+     * @throws Throws a type error when the status does not exists and an error when the status 204 is set up with content data.
      */
     static setStatus(output, status) {
         if (!this.messages[status]) {
-            throw new TypeError(`Nonexistent status '${status}' can't be set.`);
+            throw new TypeError(`A nonexistent status '${status}' can't be set.`);
         }
-        output.message = this.messages[status];
+        if (status === 204 && output.data && output.data.byteLength > 0) {
+            throw new Error(`Status code 204 can't be set with content data.`);
+        }
         output.status = status;
+        output.message = this.messages[status];
     }
     /**
      * Set the response content.
      * @param output Output entity.
      * @param data Output data.
      * @param type Output MIME type.
+     * @throws Throws an error when the content is set with status 204.
      */
     static setContent(output, data, type) {
+        if (output.status === 204) {
+            throw new Error(`Content can't be set up with status code 204.`);
+        }
         output.data = data instanceof Buffer ? data : Buffer.from(data, 'utf-8');
-        this.setMultiHeaders(output, {
-            'Content-Length': output.data.byteLength.toString(),
+        this.setMultipleHeaders(output, {
+            'Content-Length': output.data.byteLength,
             'Content-Type': type || 'application/octet-stream'
         });
     }
@@ -89,10 +97,9 @@ let Helper = class Helper extends Class.Null {
      */
     static setStatusJson(output, status, message) {
         this.setStatus(output, status);
-        this.setContentJson(output, {
-            status: status,
-            message: message || this.messages[status] || ''
-        });
+        if (status !== 204) {
+            this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+        }
     }
 };
 /**
@@ -171,7 +178,7 @@ __decorate([
 ], Helper, "setHeader", null);
 __decorate([
     Class.Public()
-], Helper, "setMultiHeaders", null);
+], Helper, "setMultipleHeaders", null);
 __decorate([
     Class.Public()
 ], Helper, "setStatus", null);

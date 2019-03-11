@@ -6,15 +6,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Http = require("http");
 const Url = require("url");
 const Class = require("@singleware/class");
 const Observable = require("@singleware/observable");
-const request_1 = require("./request");
+const Request = require("./request");
+const helper_1 = require("./helper");
 /**
  * Back-end HTTP service class.
  */
@@ -26,58 +27,60 @@ let Server = class Server extends Class.Null {
     constructor(settings) {
         super();
         /**
-         * Service events.
+         * Receive subject instance.
          */
-        this.events = {
-            receive: new Observable.Subject(),
-            send: new Observable.Subject(),
-            error: new Observable.Subject()
-        };
+        this.receiveSubject = new Observable.Subject();
+        /**
+         * Send subject instance.
+         */
+        this.sendSubject = new Observable.Subject();
+        /**
+         * Error subject instance.
+         */
+        this.errorSubject = new Observable.Subject();
         this.settings = settings;
         this.server = Http.createServer(this.requestHandler.bind(this));
     }
     /**
-     * Create an unprocessed request with the specified parameters.
-     * @param address Request address.
-     * @param method Request method.
-     * @param path Request path
-     * @param search Request search parameters.
-     * @param headers Request headers.
-     * @returns Returns the created request object.
+     * Gets an error request based on the specified request information.
+     * @param request Request information.
+     * @returns Returns the new error request.
      */
-    createRequest(address, method, path, search, headers) {
-        return {
-            path: path,
-            input: {
-                address: address,
-                method: method,
-                search: search,
-                headers: headers,
-                data: ''
-            },
-            output: {
-                status: 0,
-                message: '',
-                headers: {},
-                data: ''
-            },
-            environment: {}
-        };
+    getErrorRequest(request) {
+        if (!request.error) {
+            return request;
+        }
+        const input = request.input;
+        return helper_1.Helper.getRequest(input.address, input.port, input.method, `#${request.path}`, input.search, input.headers, {
+            exception: this.settings.debug ? request.error.stack : request.error.message
+        });
     }
     /**
-     * Request event handler
-     * @param request Request message.
-     * @param response Response message.
+     * Response send handler.
+     * @param request Request information.
      */
-    requestHandler(incoming, response) {
-        const url = Url.parse(incoming.url || '/');
-        const address = incoming.connection.address().address;
-        const method = (incoming.method || 'GET').toUpperCase();
-        const path = url.pathname || '/';
-        const search = request_1.Helper.getSearchMap(url.search || '');
-        const request = this.createRequest(address, method, path, search, incoming.headers);
-        incoming.on('data', (chunk) => (request.input.data += chunk));
-        incoming.on('end', () => this.responseHandler(request, response));
+    sendHandler(request) {
+        this.sendSubject.notifyAll(request);
+    }
+    /**
+     * Request error handler.
+     * @param request Request information.
+     * @param error Error information.
+     */
+    errorHandler(request, response, error) {
+        request.error = error;
+        this.errorSubject.notifyAll(request);
+        if (!response.finished) {
+            this.responseHandler(this.getErrorRequest(request), response);
+        }
+    }
+    /**
+     * Request receive handler.
+     * @param request Request information.
+     * @param data Data chunk.
+     */
+    receiveHandler(request, data) {
+        request.input.data += data;
     }
     /**
      * Response event handler.
@@ -85,40 +88,52 @@ let Server = class Server extends Class.Null {
      * @param response Response manager.
      */
     async responseHandler(request, response) {
-        try {
-            await this.events.receive.notifyAll(request);
+        await this.receiveSubject.notifyAll(request);
+        if (request.error) {
+            this.responseHandler(this.getErrorRequest(request), response);
         }
-        catch (exception) {
-            const input = request.input;
-            request.environment.exception = exception;
-            await this.events.error.notifyAll(request);
-            request = this.createRequest(input.address, input.method, '!', {}, input.headers);
-            request.environment.exception = this.settings.debug ? exception.stack : exception.message;
-            await this.events.receive.notifyAll(request);
+        else {
+            response.writeHead(request.output.status || 501, request.output.message, request.output.headers);
+            if (request.output.data) {
+                response.write(request.output.data);
+            }
+            response.end(this.sendHandler.bind(this, request));
         }
-        finally {
-            const output = request.output;
-            response.writeHead(output.status || 501, output.message || 'Not Implemented', output.headers);
-            response.end(output.data, () => this.events.send.notifyAll(request));
-        }
+    }
+    /**
+     * Request event handler.
+     * @param incoming Incoming message.
+     * @param response Response message.
+     */
+    requestHandler(incoming, response) {
+        const url = Url.parse(incoming.url || '/');
+        const address = helper_1.Helper.getRemoteAddress(incoming) || '0.0.0.0';
+        const port = incoming.connection.remotePort || incoming.socket.remotePort || 0;
+        const method = (incoming.method || 'GET').toUpperCase();
+        const path = url.pathname || '/';
+        const search = Request.Helper.getURLSearch(url.search || '');
+        const request = helper_1.Helper.getRequest(address, port, method, path, search, incoming.headers, {});
+        incoming.on('data', this.receiveHandler.bind(this, request));
+        incoming.on('error', this.errorHandler.bind(this, request, response));
+        incoming.on('end', this.responseHandler.bind(this, request, response));
     }
     /**
      * Receive request event.
      */
     get onReceive() {
-        return this.events.receive;
+        return this.receiveSubject;
     }
     /**
      * Send response event.
      */
     get onSend() {
-        return this.events.send;
+        return this.sendSubject;
     }
     /**
      * Error response event.
      */
     get onError() {
-        return this.events.error;
+        return this.errorSubject;
     }
     /**
      * Starts the service listening.
@@ -141,16 +156,31 @@ __decorate([
 ], Server.prototype, "settings", void 0);
 __decorate([
     Class.Private()
-], Server.prototype, "events", void 0);
+], Server.prototype, "receiveSubject", void 0);
 __decorate([
     Class.Private()
-], Server.prototype, "createRequest", null);
+], Server.prototype, "sendSubject", void 0);
 __decorate([
     Class.Private()
-], Server.prototype, "requestHandler", null);
+], Server.prototype, "errorSubject", void 0);
+__decorate([
+    Class.Private()
+], Server.prototype, "getErrorRequest", null);
+__decorate([
+    Class.Private()
+], Server.prototype, "sendHandler", null);
+__decorate([
+    Class.Private()
+], Server.prototype, "errorHandler", null);
+__decorate([
+    Class.Private()
+], Server.prototype, "receiveHandler", null);
 __decorate([
     Class.Private()
 ], Server.prototype, "responseHandler", null);
+__decorate([
+    Class.Private()
+], Server.prototype, "requestHandler", null);
 __decorate([
     Class.Public()
 ], Server.prototype, "onReceive", null);

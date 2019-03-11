@@ -1,8 +1,7 @@
 import * as Application from '@singleware/application';
-import * as Security from './security';
+import * as Types from './types';
 import * as Response from './services/response';
 import * as Request from './services/request';
-import { Callable, Variables } from './types';
 import { Settings } from './settings';
 /**
  * Back-end application class.
@@ -13,33 +12,27 @@ export declare class Main extends Application.Main<Request.Input, Response.Outpu
      */
     protected settings: Settings;
     /**
-     * Set all security headers into the output.
-     * @param output Output information.
-     * @param input Input information.
+     * Determines whether the specified method is allowed or not.
+     * @param request Method name.
+     * @param methods Allowed method list.
+     * @returns Returns true when the request method is allowed, false otherwise.
+     */
+    private isAllowedMethod;
+    /**
+     * Set all response headers into the specified request.
+     * @param request Request information.
      * @param variables Route variables.
      */
-    protected setSecurityHeaders(output: Response.Output, input: Request.Input, variables: Variables): void;
+    private setResponseHeaders;
     /**
      * Process event handler.
      * @param match Matched routes.
      * @param callback Handler callback.
      */
-    protected processHandler(match: Application.Match<Request.Input, Response.Output>, callback: Callable): Promise<void>;
+    protected processHandler(match: Types.Match, callback: Types.Callable): Promise<void>;
     /**
      * Default constructor.
      * @param settings Application settings.
      */
     constructor(settings: Settings);
-    /**
-     * Set the CORS headers.
-     * @param output Output information.
-     * @param cors CORS information.
-     */
-    protected static setCORS(output: Response.Output, input: Request.Input, cors: Security.CORS): void;
-    /**
-     * Set the HSTS headers.
-     * @param output Output information.
-     * @param hsts HSTS information.
-     */
-    protected static setHSTS(output: Response.Output, hsts: Security.HSTS): void;
 }

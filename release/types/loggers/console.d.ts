@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
- * This source code is licensed under the MIT License as described in the file LICENSE.
- */
 import * as Class from '@singleware/class';
 import { Request, Logger } from '../types';
 /**
@@ -9,12 +5,17 @@ import { Request, Logger } from '../types';
  */
 export declare class Console extends Class.Null implements Logger {
     /**
-     * Gets the request header from the specified request information.
+     * Gets the a new header for the specified type.
      * @param type Header type.
-     * @param request Request information.
-     * @returns Returns the request header.
+     * @returns Returns the new header.
      */
     private getHeader;
+    /**
+     * Gets the a new request data for the specified request information.
+     * @param request Request information.
+     * @returns Returns the new request header.
+     */
+    private getRequest;
     /**
      * Receive handler.
      * @param request Request information.
@@ -35,4 +36,12 @@ export declare class Console extends Class.Null implements Logger {
      * @param request Request information.
      */
     onError(request: Request): void;
+    /**
+     * Start handler.
+     */
+    onStart(): void;
+    /**
+     * Stop handler.
+     */
+    onStop(): void;
 }

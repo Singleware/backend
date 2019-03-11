@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Silas B. Domingos
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Security from './security';
@@ -9,11 +9,15 @@ import * as Security from './security';
  */
 export interface Settings {
   /**
-   * Cross-Origin Request Sharing.
+   * Default settings for Content Security Police.
    */
-  CrossOriginRequestSharing?: Security.CORS;
+  contentSecurityPolice?: Security.CSP.Settings;
   /**
-   * HTTP Strict Transport Security.
+   * Default settings for Cross-Origin Request Sharing.
    */
-  StrictTransportSecurity?: Security.HSTS;
+  crossOriginRequestSharing?: Security.CORS.Settings;
+  /**
+   * Default settings for HTTP Strict Transport Security.
+   */
+  httpStrictTransportSecurity?: Security.HSTS.Settings;
 }

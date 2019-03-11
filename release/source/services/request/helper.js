@@ -6,8 +6,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Url = require("url");
@@ -17,12 +17,11 @@ const Class = require("@singleware/class");
  */
 let Helper = class Helper extends Class.Null {
     /**
-     * Set the response status and the response content JSON.
-     * @param output Output entity.
-     * @param status Output status.
-     * @param message Output message.
+     * Gets one map containing all search parameters from the specified search string.
+     * @param search Search string.
+     * @returns Returns the map containing all parameters acquired from the given search string.
      */
-    static getSearchMap(search) {
+    static getURLSearch(search) {
         const params = new Url.URLSearchParams(search);
         const map = {};
         for (const [key, value] of params) {
@@ -42,7 +41,7 @@ let Helper = class Helper extends Class.Null {
 };
 __decorate([
     Class.Public()
-], Helper, "getSearchMap", null);
+], Helper, "getURLSearch", null);
 Helper = __decorate([
     Class.Describe()
 ], Helper);

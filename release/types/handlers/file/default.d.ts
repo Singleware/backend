@@ -1,6 +1,6 @@
 import * as Class from '@singleware/class';
 import * as Response from '../../services/response';
-import { Match } from '../../types';
+import * as Types from '../../types';
 import { Settings } from './settings';
 /**
  * Default file handler class.
@@ -20,18 +20,6 @@ export declare class Default extends Class.Null {
      * @returns Returns the corresponding MIME type or undefined when the type was not found.
      */
     protected getMimeType(path: string): string | undefined;
-    /**
-     * Read all content of the specified file.
-     * @param path File path.
-     * @returns Returns the file content.
-     */
-    protected readFile(path: string): Promise<Buffer>;
-    /**
-     * Test whether the specified file exists or not.
-     * @param path File path.
-     * @returns Returns the promise to get true when the file exists or false otherwise.
-     */
-    protected fileExists(path: string): Promise<boolean>;
     /**
      * Sets the content of a default error file into the give output response.
      * @param output Output response.
@@ -54,12 +42,12 @@ export declare class Default extends Class.Null {
      * Exception response processor.
      * @param match Matched rote.
      */
-    exceptionResponse(match: Match): Promise<void>;
+    exceptionResponse(match: Types.Match): Promise<void>;
     /**
      * Default response processor.
      * @param match Matched rote.
      */
-    defaultResponse(match: Match): Promise<void>;
+    defaultResponse(match: Types.Match): Promise<void>;
     /**
      * Gets the base directory.
      */

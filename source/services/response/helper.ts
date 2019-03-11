@@ -1,10 +1,13 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
 
+import * as Types from '../../types';
+
 import { Headers } from '../headers';
+
 import { Status } from './status';
 import { Output } from './output';
 
@@ -84,26 +87,26 @@ export class Helper extends Class.Null {
   };
 
   /**
-   * Set a response header.
+   * Set one response header.
    * @param output Output entity.
    * @param name Header name.
    * @param value Header value.
    */
   @Class.Public()
-  public static setHeader(output: Output, name: string, value: string | string[]): void {
+  public static setHeader(output: Output, name: string, value: number | string | string[]): void {
     output.headers[name] = value;
   }
 
   /**
-   * Set multi response headers.
+   * Set multiple response headers.
    * @param output Output entity.
    * @param headers Headers to be set.
    */
   @Class.Public()
-  public static setMultiHeaders(output: Output, headers: Headers): void {
+  public static setMultipleHeaders(output: Output, headers: Headers): void {
     for (const name in headers) {
       const header = headers[name];
-      if (header !== void 0 && header.length > 0) {
+      if (header !== void 0) {
         this.setHeader(output, name, header);
       }
     }
@@ -113,14 +116,18 @@ export class Helper extends Class.Null {
    * Set the response status.
    * @param output Output entity.
    * @param status Status code.
+   * @throws Throws a type error when the status does not exists and an error when the status 204 is set up with content data.
    */
   @Class.Public()
   public static setStatus(output: Output, status: number): void {
     if (!this.messages[status]) {
-      throw new TypeError(`Nonexistent status '${status}' can't be set.`);
+      throw new TypeError(`A nonexistent status '${status}' can't be set.`);
     }
-    output.message = this.messages[status];
+    if (status === 204 && output.data && output.data.byteLength > 0) {
+      throw new Error(`Status code 204 can't be set with content data.`);
+    }
     output.status = status;
+    output.message = this.messages[status];
   }
 
   /**
@@ -128,12 +135,16 @@ export class Helper extends Class.Null {
    * @param output Output entity.
    * @param data Output data.
    * @param type Output MIME type.
+   * @throws Throws an error when the content is set with status 204.
    */
   @Class.Public()
   public static setContent(output: Output, data: string | Buffer, type?: string): void {
+    if (output.status === 204) {
+      throw new Error(`Content can't be set up with status code 204.`);
+    }
     output.data = data instanceof Buffer ? data : Buffer.from(data, 'utf-8');
-    this.setMultiHeaders(output, {
-      'Content-Length': output.data.byteLength.toString(),
+    this.setMultipleHeaders(output, {
+      'Content-Length': output.data.byteLength,
       'Content-Type': type || 'application/octet-stream'
     });
   }
@@ -170,9 +181,8 @@ export class Helper extends Class.Null {
   @Class.Public()
   public static setStatusJson(output: Output, status: number, message?: string): void {
     this.setStatus(output, status);
-    this.setContentJson(output, {
-      status: status,
-      message: message || this.messages[status] || ''
-    });
+    if (status !== 204) {
+      this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+    }
   }
 }

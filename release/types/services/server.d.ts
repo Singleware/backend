@@ -1,11 +1,11 @@
 import * as Class from '@singleware/class';
 import * as Observable from '@singleware/observable';
-import { Request, Service } from '../types';
+import * as Types from '../types';
 import { Settings } from './settings';
 /**
  * Back-end HTTP service class.
  */
-export declare class Server extends Class.Null implements Service {
+export declare class Server extends Class.Null implements Types.Service {
     /**
      * HTTP server.
      */
@@ -15,31 +15,52 @@ export declare class Server extends Class.Null implements Service {
      */
     private settings;
     /**
-     * Service events.
+     * Receive subject instance.
      */
-    private events;
+    private receiveSubject;
     /**
-     * Create an unprocessed request with the specified parameters.
-     * @param address Request address.
-     * @param method Request method.
-     * @param path Request path
-     * @param search Request search parameters.
-     * @param headers Request headers.
-     * @returns Returns the created request object.
+     * Send subject instance.
      */
-    private createRequest;
+    private sendSubject;
     /**
-     * Request event handler
-     * @param request Request message.
-     * @param response Response message.
+     * Error subject instance.
      */
-    private requestHandler;
+    private errorSubject;
+    /**
+     * Gets an error request based on the specified request information.
+     * @param request Request information.
+     * @returns Returns the new error request.
+     */
+    private getErrorRequest;
+    /**
+     * Response send handler.
+     * @param request Request information.
+     */
+    private sendHandler;
+    /**
+     * Request error handler.
+     * @param request Request information.
+     * @param error Error information.
+     */
+    private errorHandler;
+    /**
+     * Request receive handler.
+     * @param request Request information.
+     * @param data Data chunk.
+     */
+    private receiveHandler;
     /**
      * Response event handler.
      * @param request Request information.
      * @param response Response manager.
      */
     private responseHandler;
+    /**
+     * Request event handler.
+     * @param incoming Incoming message.
+     * @param response Response message.
+     */
+    private requestHandler;
     /**
      * Default constructor.
      * @param settings Application settings.
@@ -48,15 +69,15 @@ export declare class Server extends Class.Null implements Service {
     /**
      * Receive request event.
      */
-    readonly onReceive: Observable.Subject<Request>;
+    readonly onReceive: Observable.Subject<Types.Request>;
     /**
      * Send response event.
      */
-    readonly onSend: Observable.Subject<Request>;
+    readonly onSend: Observable.Subject<Types.Request>;
     /**
      * Error response event.
      */
-    readonly onError: Observable.Subject<Request>;
+    readonly onError: Observable.Subject<Types.Request>;
     /**
      * Starts the service listening.
      */

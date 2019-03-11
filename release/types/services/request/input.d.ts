@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import { Headers } from '../headers';
@@ -13,6 +13,10 @@ export interface Input {
    * Request address.
    */
   address: string;
+  /**
+   * Request port.
+   */
+  port: number;
   /**
    * Request method.
    */

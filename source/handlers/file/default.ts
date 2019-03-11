@@ -1,18 +1,17 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-import * as Fs from 'fs';
 import * as Path from 'path';
-import * as Util from 'util';
 
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
 import * as Response from '../../services/response';
-import { Match } from '../../types';
+import * as Types from '../../types';
 
 import { Settings } from './settings';
+import { Helper } from './helper';
 
 /**
  * Default file handler class.
@@ -48,29 +47,6 @@ export class Default extends Class.Null {
   }
 
   /**
-   * Read all content of the specified file.
-   * @param path File path.
-   * @returns Returns the file content.
-   */
-  @Class.Protected()
-  protected async readFile(path: string): Promise<Buffer> {
-    return await Util.promisify(Fs.readFile)(path);
-  }
-
-  /**
-   * Test whether the specified file exists or not.
-   * @param path File path.
-   * @returns Returns the promise to get true when the file exists or false otherwise.
-   */
-  @Class.Protected()
-  protected async fileExists(path: string): Promise<boolean> {
-    if (!(await Util.promisify(Fs.exists)(path))) {
-      return false;
-    }
-    return (await Util.promisify(Fs.lstat)(path)).isFile();
-  }
-
-  /**
    * Sets the content of a default error file into the give output response.
    * @param output Output response.
    * @param status Output status.
@@ -80,17 +56,16 @@ export class Default extends Class.Null {
   protected async setResponseError(output: Response.Output, status: number, information: string): Promise<void> {
     const path = Path.join(Default.assetsPath, `${status}.html`);
     Response.Helper.setStatus(output, status);
-    if (await this.fileExists(path)) {
-      const variables = {
+    if (await Helper.fileExists(path)) {
+      const variables = <any>{
         '%STATUS%': status.toString(),
         '%MESSAGE%': output.message,
         '%INFORMATION%': information
       };
       const replacement = new RegExp(Object.keys(variables).join('|'), 'g');
-      const template = (await this.readFile(path)).toString('utf-8');
-      const content = template.replace(replacement, (match: string) => (<any>variables)[match]);
-      const type = this.settings.types.html || 'text/html';
-      Response.Helper.setContent(output, content, type);
+      const template = (await Helper.readFile(path)).toString('utf-8');
+      const content = template.replace(replacement, (match: string) => variables[match]);
+      Response.Helper.setContent(output, content, this.settings.types.html || 'text/html');
     }
   }
 
@@ -103,11 +78,11 @@ export class Default extends Class.Null {
   protected async setResponseFile(output: Response.Output, path: string): Promise<void> {
     const type = this.getMimeType(path);
     const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
-    if (!type || !(await this.fileExists(file))) {
+    if (!type || !(await Helper.fileExists(file))) {
       await this.setResponseError(output, 404, `File '${path}' could not be found`);
     } else {
       Response.Helper.setStatus(output, 200);
-      Response.Helper.setContent(output, await this.readFile(file), type);
+      Response.Helper.setContent(output, await Helper.readFile(file), type);
     }
   }
 
@@ -125,8 +100,8 @@ export class Default extends Class.Null {
    * @param match Matched rote.
    */
   @Class.Public()
-  @Application.Processor({ path: '!', environment: { methods: '*' } })
-  public async exceptionResponse(match: Match): Promise<void> {
+  @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
+  public async exceptionResponse(match: Types.Match): Promise<void> {
     await this.setResponseError(match.detail.output, 500, match.detail.environment.exception);
   }
 
@@ -135,8 +110,8 @@ export class Default extends Class.Null {
    * @param match Matched rote.
    */
   @Class.Public()
-  @Application.Processor({ path: '/', exact: false, environment: { methods: 'GET', access: {} } })
-  public async defaultResponse(match: Match): Promise<void> {
+  @Application.Processor({ path: '/', exact: false, environment: { methods: 'GET' } })
+  public async defaultResponse(match: Types.Match): Promise<void> {
     const path = match.detail.path === '/' ? Path.basename(this.settings.indexFile) : Path.normalize(match.detail.path);
     await this.setResponseFile(match.detail.output, path);
   }

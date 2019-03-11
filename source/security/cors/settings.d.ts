@@ -1,12 +1,12 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 
 /**
- * Access Control for Cross-Origin Request Sharing (CORS).
+ * Settings for Cross-Origin Request Sharing (CORS).
  */
-export interface CORS {
+export interface Settings {
   /**
    * Determines whether the credentials must be provided or not.
    */
@@ -18,11 +18,11 @@ export interface CORS {
   /**
    * Allowed methods.
    */
-  allowMethods?: string | string[];
+  allowMethods?: string[];
   /**
    * Allowed headers.
    */
-  allowHeaders?: string | string[];
+  allowHeaders?: string[];
   /**
    * Exposed headers.
    */

@@ -8,16 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var Default_1;
 "use strict";
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-const Fs = require("fs");
 const Path = require("path");
-const Util = require("util");
 const Class = require("@singleware/class");
 const Application = require("@singleware/application");
 const Response = require("../../services/response");
+const helper_1 = require("./helper");
 /**
  * Default file handler class.
  */
@@ -45,25 +44,6 @@ let Default = Default_1 = class Default extends Class.Null {
         return this.settings.types[type];
     }
     /**
-     * Read all content of the specified file.
-     * @param path File path.
-     * @returns Returns the file content.
-     */
-    async readFile(path) {
-        return await Util.promisify(Fs.readFile)(path);
-    }
-    /**
-     * Test whether the specified file exists or not.
-     * @param path File path.
-     * @returns Returns the promise to get true when the file exists or false otherwise.
-     */
-    async fileExists(path) {
-        if (!(await Util.promisify(Fs.exists)(path))) {
-            return false;
-        }
-        return (await Util.promisify(Fs.lstat)(path)).isFile();
-    }
-    /**
      * Sets the content of a default error file into the give output response.
      * @param output Output response.
      * @param status Output status.
@@ -72,17 +52,16 @@ let Default = Default_1 = class Default extends Class.Null {
     async setResponseError(output, status, information) {
         const path = Path.join(Default_1.assetsPath, `${status}.html`);
         Response.Helper.setStatus(output, status);
-        if (await this.fileExists(path)) {
+        if (await helper_1.Helper.fileExists(path)) {
             const variables = {
                 '%STATUS%': status.toString(),
                 '%MESSAGE%': output.message,
                 '%INFORMATION%': information
             };
             const replacement = new RegExp(Object.keys(variables).join('|'), 'g');
-            const template = (await this.readFile(path)).toString('utf-8');
+            const template = (await helper_1.Helper.readFile(path)).toString('utf-8');
             const content = template.replace(replacement, (match) => variables[match]);
-            const type = this.settings.types.html || 'text/html';
-            Response.Helper.setContent(output, content, type);
+            Response.Helper.setContent(output, content, this.settings.types.html || 'text/html');
         }
     }
     /**
@@ -93,12 +72,12 @@ let Default = Default_1 = class Default extends Class.Null {
     async setResponseFile(output, path) {
         const type = this.getMimeType(path);
         const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
-        if (!type || !(await this.fileExists(file))) {
+        if (!type || !(await helper_1.Helper.fileExists(file))) {
             await this.setResponseError(output, 404, `File '${path}' could not be found`);
         }
         else {
             Response.Helper.setStatus(output, 200);
-            Response.Helper.setContent(output, await this.readFile(file), type);
+            Response.Helper.setContent(output, await helper_1.Helper.readFile(file), type);
         }
     }
     /**
@@ -153,23 +132,17 @@ __decorate([
 ], Default.prototype, "getMimeType", null);
 __decorate([
     Class.Protected()
-], Default.prototype, "readFile", null);
-__decorate([
-    Class.Protected()
-], Default.prototype, "fileExists", null);
-__decorate([
-    Class.Protected()
 ], Default.prototype, "setResponseError", null);
 __decorate([
     Class.Protected()
 ], Default.prototype, "setResponseFile", null);
 __decorate([
     Class.Public(),
-    Application.Processor({ path: '!', environment: { methods: '*' } })
+    Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
 ], Default.prototype, "exceptionResponse", null);
 __decorate([
     Class.Public(),
-    Application.Processor({ path: '/', exact: false, environment: { methods: 'GET', access: {} } })
+    Application.Processor({ path: '/', exact: false, environment: { methods: 'GET' } })
 ], Default.prototype, "defaultResponse", null);
 __decorate([
     Class.Public()

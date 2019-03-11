@@ -1,12 +1,12 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
+/*
+ * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
 import * as Response from '../../services/response';
-import { Match } from '../../types';
+import * as Types from '../../types';
 
 import { Settings } from './settings';
 
@@ -34,8 +34,8 @@ export class Default extends Class.Null {
    * @param match Matched route.
    */
   @Class.Public()
-  @Application.Processor({ path: '!', environment: { methods: '*' } })
-  public exceptionResponse(match: Match) {
+  @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
+  public exceptionResponse(match: Types.Match) {
     Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.exception);
   }
 
@@ -44,8 +44,8 @@ export class Default extends Class.Null {
    * @param match Matched route.
    */
   @Class.Public()
-  @Application.Processor({ path: '/', exact: false, environment: { methods: '*', access: {} } })
-  public async defaultResponse(match: Match): Promise<void> {
+  @Application.Processor({ path: '/', exact: false, environment: { methods: '*' } })
+  public async defaultResponse(match: Types.Match): Promise<void> {
     Response.Helper.setStatusJson(match.detail.output, 501);
   }
 }

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2018 Silas B. Domingos
- * This source code is licensed under the MIT License as described in the file LICENSE.
- */
 import * as Class from '@singleware/class';
 import { Headers } from '../headers';
 import { Output } from './output';
@@ -14,22 +10,23 @@ export declare class Helper extends Class.Null {
      */
     private static messages;
     /**
-     * Set a response header.
+     * Set one response header.
      * @param output Output entity.
      * @param name Header name.
      * @param value Header value.
      */
-    static setHeader(output: Output, name: string, value: string | string[]): void;
+    static setHeader(output: Output, name: string, value: number | string | string[]): void;
     /**
-     * Set multi response headers.
+     * Set multiple response headers.
      * @param output Output entity.
      * @param headers Headers to be set.
      */
-    static setMultiHeaders(output: Output, headers: Headers): void;
+    static setMultipleHeaders(output: Output, headers: Headers): void;
     /**
      * Set the response status.
      * @param output Output entity.
      * @param status Status code.
+     * @throws Throws a type error when the status does not exists and an error when the status 204 is set up with content data.
      */
     static setStatus(output: Output, status: number): void;
     /**
@@ -37,6 +34,7 @@ export declare class Helper extends Class.Null {
      * @param output Output entity.
      * @param data Output data.
      * @param type Output MIME type.
+     * @throws Throws an error when the content is set with status 204.
      */
     static setContent(output: Output, data: string | Buffer, type?: string): void;
     /**
