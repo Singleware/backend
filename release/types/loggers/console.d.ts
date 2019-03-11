@@ -1,41 +1,58 @@
 import * as Class from '@singleware/class';
-import { Request, Logger } from '../types';
+import * as Types from '../types';
 /**
  * Back-end HTTP logger class.
  */
-export declare class Console extends Class.Null implements Logger {
+export declare class Console extends Class.Null implements Types.Logger {
     /**
-     * Gets the a new header for the specified type.
-     * @param type Header type.
-     * @returns Returns the new header.
+     * Map of request entries.
      */
-    private getHeader;
+    private entryMap;
     /**
-     * Gets the a new request data for the specified request information.
+     * Gets the specified value filled by the given digit character and the minimum length.
+     * @param value Input value.
+     * @param length Minimum length
+     * @param digit Digit character.
+     * @returns Returns the filled string.
+     */
+    private getFilledValue;
+    /**
+     * Gets the current time string.
+     * @returns Returns the current time string.
+     */
+    private getCurrentTime;
+    /**
+     * Gets the difference between the specified time and the current time.
+     * @param time Time object.
+     * @returns Returns the difference time.
+     */
+    private getDifferenceTime;
+    /**
+     * Gets the request resume for the specified request information.
      * @param request Request information.
-     * @returns Returns the new request header.
+     * @returns Returns the request resume.
      */
-    private getRequest;
+    private getRequestResume;
     /**
      * Receive handler.
      * @param request Request information.
      */
-    onReceive(request: Request): void;
+    onReceive(request: Types.Request): void;
     /**
      * Process handler.
      * @param request Request information.
      */
-    onProcess(request: Request): void;
+    onProcess(request: Types.Request): void;
     /**
      * Send handler.
      * @param request Request information.
      */
-    onSend(request: Request): void;
+    onSend(request: Types.Request): void;
     /**
      * Error handler.
      * @param request Request information.
      */
-    onError(request: Request): void;
+    onError(request: Types.Request): void;
     /**
      * Start handler.
      */
