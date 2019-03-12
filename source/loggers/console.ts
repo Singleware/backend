@@ -55,13 +55,15 @@ export class Console extends Class.Null implements Types.Logger {
    */
   @Class.Private()
   private getDifferenceTime(time: Date): string {
-    const difference = new Date().getUTCMilliseconds() - time.getUTCMilliseconds();
+    const difference = new Date().getTime() - time.getTime();
     if (difference < 1000) {
       return `${this.getFilledValue(difference, 3, '0')}ms`;
     } else if (difference < 60000) {
       return `${this.getFilledValue(Math.abs(difference / 1000), 3, '0')}s `;
-    } else {
+    } else if (difference < 3600000) {
       return `${this.getFilledValue(Math.abs(difference / 60000), 3, '0')}m `;
+    } else {
+      return `${this.getFilledValue(Math.abs(difference / 3600000), 3, '0')}h `;
     }
   }
 
@@ -77,7 +79,7 @@ export class Console extends Class.Null implements Types.Logger {
     const difference = this.getDifferenceTime(entry.time);
     const port = this.getFilledValue(request.input.port, 5, ' ');
     const address = request.input.address;
-    return `${status} ${difference} ${port} ${address}\t${request.output.status} ${request.input.method}\t${request.path}`;
+    return `${status} ${difference} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
   }
 
   /**
