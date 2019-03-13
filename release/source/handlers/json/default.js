@@ -30,7 +30,7 @@ let Default = class Default extends Class.Null {
      * @param match Matched route.
      */
     exceptionResponse(match) {
-        Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.exception);
+        Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.local.exception);
     }
     /**
      * Default response processor.

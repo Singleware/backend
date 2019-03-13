@@ -85,7 +85,7 @@ let Default = Default_1 = class Default extends Class.Null {
      * @param match Matched rote.
      */
     async exceptionResponse(match) {
-        await this.setResponseError(match.detail.output, 500, match.detail.environment.exception);
+        await this.setResponseError(match.detail.output, 500, match.detail.environment.local.exception);
     }
     /**
      * Default response processor.

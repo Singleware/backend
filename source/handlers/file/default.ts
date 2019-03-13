@@ -102,7 +102,7 @@ export class Default extends Class.Null {
   @Class.Public()
   @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
   public async exceptionResponse(match: Types.Match): Promise<void> {
-    await this.setResponseError(match.detail.output, 500, match.detail.environment.exception);
+    await this.setResponseError(match.detail.output, 500, match.detail.environment.local.exception);
   }
 
   /**

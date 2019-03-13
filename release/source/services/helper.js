@@ -73,7 +73,10 @@ let Helper = class Helper extends Class.Null {
                 data: void 0
             },
             environment: {
-                ...variables
+                local: {
+                    ...variables
+                },
+                shared: {}
             },
             granted: true
         };

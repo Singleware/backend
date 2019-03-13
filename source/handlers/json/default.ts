@@ -36,7 +36,7 @@ export class Default extends Class.Null {
   @Class.Public()
   @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
   public exceptionResponse(match: Types.Match) {
-    Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.exception);
+    Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.local.exception);
   }
 
   /**
