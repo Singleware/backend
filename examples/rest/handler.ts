@@ -16,7 +16,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '#', exact: false, environment: { methods: '*' } })
-  public errorProcessor(match: Backend.Match): void {
+  public errorProcessor(match: Backend.Types.Match): void {
     super.exceptionResponse(match);
   }
 
@@ -26,7 +26,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/', exact: false, environment: { methods: '*' } })
-  public defaultProcessor(match: Backend.Match): void {
+  public defaultProcessor(match: Backend.Types.Match): void {
     super.defaultResponse(match);
   }
 
@@ -36,8 +36,8 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests', environment: { methods: 'GET' } })
-  public listProcessor(match: Backend.Match): void {
-    Backend.Response.setStatusJson(match.detail.output, 200);
+  public listProcessor(match: Backend.Types.Match): void {
+    Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
   /**
@@ -46,8 +46,8 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests', environment: { methods: 'POST' } })
-  public createProcessor(match: Backend.Match): void {
-    Backend.Response.setStatusJson(match.detail.output, 201);
+  public createProcessor(match: Backend.Types.Match): void {
+    Backend.Responses.Helper.setStatusJson(match.detail.output, 201);
   }
 
   /**
@@ -56,8 +56,8 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'GET' } })
-  public readProcessor(match: Backend.Match): void {
-    Backend.Response.setStatusJson(match.detail.output, 200);
+  public readProcessor(match: Backend.Types.Match): void {
+    Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
   /**
@@ -66,8 +66,8 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'PATCH' } })
-  public updateProcessor(match: Backend.Match): void {
-    Backend.Response.setStatusJson(match.detail.output, 200);
+  public updateProcessor(match: Backend.Types.Match): void {
+    Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
   /**
@@ -76,7 +76,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'DELETE' } })
-  public deleteProcessor(match: Backend.Match): void {
-    Backend.Response.setStatusJson(match.detail.output, 200);
+  public deleteProcessor(match: Backend.Types.Match): void {
+    Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 }

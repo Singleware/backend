@@ -55,7 +55,8 @@ export declare class Helper extends Class.Null {
      * Set the response status and the response content JSON.
      * @param output Output entity.
      * @param status Output status.
-     * @param message Output message.
+     * @param code Optional output code.
+     * @param text Optional output text.
      */
-    static setStatusJson(output: Output, status: number, message?: string): void;
+    static setStatusJson(output: Output, status: number, code?: number, text?: string): void;
 }

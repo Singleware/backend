@@ -4,8 +4,8 @@
  */
 import * as Class from '@singleware/class';
 
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 
 import { Settings } from './settings';
 
@@ -28,7 +28,7 @@ export class Helper extends Class.Null {
     if (settings.preload) {
       values.push('preload');
     }
-    Response.Helper.setMultipleHeaders(request.output, {
+    Responses.Helper.setMultipleHeaders(request.output, {
       'Strict-Transport-Security': values.join('; ')
     });
   }

@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
-const Response = require("../../services/response");
+const Responses = require("../../responses");
 /**
  * CSP helper class.
  */
@@ -35,7 +35,7 @@ let Helper = class Helper extends Class.Null {
      * @param settings CSP settings.
      */
     static setHeaders(request, settings) {
-        Response.Helper.setMultipleHeaders(request.output, {
+        Responses.Helper.setMultipleHeaders(request.output, {
             'Content-Security-Policy': this.buildConcatenatedPolices(settings.polices),
             'Content-Security-Policy-Report-Only': settings.reportPolices ? this.buildConcatenatedPolices(settings.reportPolices) : void 0
         });

@@ -57,16 +57,16 @@ let Console = class Console extends Class.Null {
     getDifferenceTime(time) {
         const difference = new Date().getTime() - time.getTime();
         if (difference < 1000) {
-            return `${this.getFilledValue(difference, 3, '0')}ms`;
+            return `${this.getFilledValue(difference, 5, ' ')}ms`;
         }
         else if (difference < 60000) {
-            return `${this.getFilledValue(Math.abs(difference / 1000), 3, '0')}s `;
+            return `${this.getFilledValue((difference / 1000).toFixed(2), 5, ' ')}s `;
         }
         else if (difference < 3600000) {
-            return `${this.getFilledValue(Math.abs(difference / 60000), 3, '0')}m `;
+            return `${this.getFilledValue((difference / 60000).toFixed(2), 5, ' ')}m `;
         }
         else {
-            return `${this.getFilledValue(Math.abs(difference / 3600000), 3, '0')}h `;
+            return `${this.getFilledValue((difference / 3600000).toFixed(2), 5, ' ')}h `;
         }
     }
     /**
@@ -78,8 +78,8 @@ let Console = class Console extends Class.Null {
         const entry = this.entryMap.get(request.input);
         const status = entry.status.join('');
         const difference = this.getDifferenceTime(entry.time);
-        const port = this.getFilledValue(request.input.port, 5, ' ');
-        const address = request.input.address;
+        const port = this.getFilledValue(request.input.connection.port, 5, ' ');
+        const address = request.input.connection.address;
         return `${status} ${difference} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
     }
     /**

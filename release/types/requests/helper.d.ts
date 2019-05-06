@@ -9,5 +9,5 @@ export declare class Helper extends Class.Null {
      * @param search Search string.
      * @returns Returns the map containing all parameters acquired from the given search string.
      */
-    static getURLSearch(search: string): Search;
+    static parseURLSearch(search: string): Search;
 }

@@ -14,7 +14,7 @@ const Http = require("http");
 const Url = require("url");
 const Class = require("@singleware/class");
 const Observable = require("@singleware/observable");
-const Request = require("./request");
+const Requests = require("../requests");
 const helper_1 = require("./helper");
 /**
  * Back-end HTTP service class.
@@ -42,8 +42,8 @@ let Server = class Server extends Class.Null {
         this.server = Http.createServer(this.requestHandler.bind(this));
     }
     /**
-     * Gets an error request based on the specified request information.
-     * @param request Request information.
+     * Gets an error request based on the specified Request entity.
+     * @param request Request entity.
      * @returns Returns the new error request.
      */
     getErrorRequest(request) {
@@ -51,40 +51,40 @@ let Server = class Server extends Class.Null {
             return request;
         }
         const input = request.input;
-        return helper_1.Helper.getRequest(input.address, input.port, input.method, `#${request.path}`, input.search, input.headers, {
+        return helper_1.Helper.getRequest(input.connection, input.method, `#${request.path}`, input.search, input.headers, {
             exception: this.settings.debug ? request.error.stack : request.error.message
         });
     }
     /**
      * Response send handler.
-     * @param request Request information.
+     * @param request Request entity.
      */
-    sendHandler(request) {
-        this.sendSubject.notifyAll(request);
+    async sendHandler(request) {
+        await this.sendSubject.notifyAll(request);
     }
     /**
      * Request error handler.
-     * @param request Request information.
-     * @param error Error information.
+     * @param request Request entity.
+     * @param error Error entity.
      */
-    errorHandler(request, response, error) {
+    async errorHandler(request, response, error) {
         request.error = error;
-        this.errorSubject.notifyAll(request);
-        if (!response.finished) {
+        await this.errorSubject.notifyAll(request);
+        if (!response.finished && request.input.connection.active) {
             this.responseHandler(this.getErrorRequest(request), response);
         }
     }
     /**
-     * Request receive handler.
-     * @param request Request information.
-     * @param data Data chunk.
+     * Request receive data handler.
+     * @param request Request entity.
+     * @param buffer Buffer chunk.
      */
-    receiveHandler(request, data) {
-        request.input.data += data;
+    receiveHandler(request, buffer) {
+        request.input.data += buffer;
     }
     /**
      * Response event handler.
-     * @param request Request information.
+     * @param request Request entity.
      * @param response Response manager.
      */
     async responseHandler(request, response) {
@@ -101,21 +101,34 @@ let Server = class Server extends Class.Null {
         }
     }
     /**
+     * Close event handler.
+     * @param request Request entity.
+     * @param response Response manager.
+     */
+    async closeHandler(request, response) {
+        request.input.connection.active = false;
+        if (!response.finished) {
+            request.error = new Error(`Connection closed unexpectedly.`);
+            await this.errorSubject.notifyAll(request);
+        }
+    }
+    /**
      * Request event handler.
      * @param incoming Incoming message.
      * @param response Response message.
      */
     requestHandler(incoming, response) {
-        const url = Url.parse(incoming.url || '/');
-        const address = helper_1.Helper.getRemoteAddress(incoming) || '0.0.0.0';
         const port = incoming.connection.remotePort || incoming.socket.remotePort || 0;
+        const address = helper_1.Helper.getRemoteAddress(incoming) || '0.0.0.0';
         const method = (incoming.method || 'GET').toUpperCase();
+        const url = Url.parse(incoming.url || '/');
+        const search = Requests.Helper.parseURLSearch(url.search || '');
         const path = url.pathname || '/';
-        const search = Request.Helper.getURLSearch(url.search || '');
-        const request = helper_1.Helper.getRequest(address, port, method, path, search, incoming.headers, {});
+        const request = helper_1.Helper.getRequest({ active: true, address: address, port: port }, method, path, search, incoming.headers, {});
         incoming.on('data', this.receiveHandler.bind(this, request));
         incoming.on('error', this.errorHandler.bind(this, request, response));
         incoming.on('end', this.responseHandler.bind(this, request, response));
+        response.on('close', this.closeHandler.bind(this, request, response));
     }
     /**
      * Receive request event.
@@ -178,6 +191,9 @@ __decorate([
 __decorate([
     Class.Private()
 ], Server.prototype, "responseHandler", null);
+__decorate([
+    Class.Private()
+], Server.prototype, "closeHandler", null);
 __decorate([
     Class.Private()
 ], Server.prototype, "requestHandler", null);

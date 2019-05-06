@@ -1,8 +1,8 @@
 import * as Http from 'http';
 import * as Class from '@singleware/class';
-import { Request, Variables } from '../types';
-import { Headers } from './headers';
-import { Search } from './request';
+import * as Types from '../types';
+import * as Requests from '../requests';
+import { Headers } from '../headers';
 /**
  * Back-end helper class.
  */
@@ -27,8 +27,7 @@ export declare class Helper extends Class.Null {
     static getRemotePort(incoming: Http.IncomingMessage): number | undefined;
     /**
      * Gets a new request with the specified parameters.
-     * @param address Request address.
-     * @param port Request port.
+     * @param connection Request connection.
      * @param method Request method.
      * @param path Request path
      * @param search Request search parameters.
@@ -36,5 +35,5 @@ export declare class Helper extends Class.Null {
      * @param variables Request variables.
      * @returns Returns the new request information.
      */
-    static getRequest(address: string, port: number, method: string, path: string, search: Search, headers: Headers, variables: Variables): Request;
+    static getRequest(connection: Requests.Connection, method: string, path: string, search: Requests.Search, headers: Headers, variables: Types.Variables): Types.Request;
 }

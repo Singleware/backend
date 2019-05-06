@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Class = require("@singleware/class");
 const Application = require("@singleware/application");
 const Security = require("./security");
-const Response = require("./services/response");
+const Responses = require("./responses");
 /**
  * Back-end application class.
  */
@@ -84,7 +84,7 @@ let Main = class Main extends Application.Main {
         }
         else if (match.detail.input.method === 'OPTIONS' && match.detail.output.status !== 204) {
             this.setResponseHeaders(match.detail, {});
-            Response.Helper.setStatus(match.detail.output, 204);
+            Responses.Helper.setStatus(match.detail.output, 204);
         }
     }
 };

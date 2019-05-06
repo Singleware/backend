@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
-const Response = require("../../services/response");
+const Responses = require("../../responses");
 /**
  * CORS helper class.
  */
@@ -22,7 +22,7 @@ let Helper = class Helper extends Class.Null {
      * @param settings CORS settings.
      */
     static setHeaders(request, settings) {
-        Response.Helper.setMultipleHeaders(request.output, {
+        Responses.Helper.setMultipleHeaders(request.output, {
             'Access-Control-Allow-Origin': settings.allowOrigin || request.input.headers['origin'],
             'Access-Control-Allow-Methods': (settings.allowMethods || ['HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']).join(', '),
             'Access-Control-Allow-Credentials': settings.allowCredentials ? 'true' : 'false',

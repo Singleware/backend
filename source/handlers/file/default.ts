@@ -7,8 +7,8 @@ import * as Path from 'path';
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 
 import { Settings } from './settings';
 import { Helper } from './helper';
@@ -53,9 +53,9 @@ export class Default extends Class.Null {
    * @param information Error information.
    */
   @Class.Protected()
-  protected async setResponseError(output: Response.Output, status: number, information: string): Promise<void> {
+  protected async setResponseError(output: Responses.Output, status: number, information: string): Promise<void> {
     const path = Path.join(Default.assetsPath, `${status}.html`);
-    Response.Helper.setStatus(output, status);
+    Responses.Helper.setStatus(output, status);
     if (await Helper.fileExists(path)) {
       const variables = <any>{
         '%STATUS%': status.toString(),
@@ -65,7 +65,7 @@ export class Default extends Class.Null {
       const replacement = new RegExp(Object.keys(variables).join('|'), 'g');
       const template = (await Helper.readFile(path)).toString('utf-8');
       const content = template.replace(replacement, (match: string) => variables[match]);
-      Response.Helper.setContent(output, content, this.settings.types.html || 'text/html');
+      Responses.Helper.setContent(output, content, this.settings.types.html || 'text/html');
     }
   }
 
@@ -75,14 +75,14 @@ export class Default extends Class.Null {
    * @param path File path.
    */
   @Class.Protected()
-  protected async setResponseFile(output: Response.Output, path: string): Promise<void> {
+  protected async setResponseFile(output: Responses.Output, path: string): Promise<void> {
     const type = this.getMimeType(path);
     const file = Path.join(this.settings.baseDirectory, Path.normalize(path));
     if (!type || !(await Helper.fileExists(file))) {
       await this.setResponseError(output, 404, `File '${path}' could not be found`);
     } else {
-      Response.Helper.setStatus(output, 200);
-      Response.Helper.setContent(output, await Helper.readFile(file), type);
+      Responses.Helper.setStatus(output, 200);
+      Responses.Helper.setContent(output, await Helper.readFile(file), type);
     }
   }
 
@@ -144,7 +144,7 @@ export class Default extends Class.Null {
    * Gets the handler types.
    */
   @Class.Public()
-  public get types(): Response.Types {
+  public get types(): Responses.Types {
     return this.settings.types;
   }
 }

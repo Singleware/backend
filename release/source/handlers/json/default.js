@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const Class = require("@singleware/class");
 const Application = require("@singleware/application");
-const Response = require("../../services/response");
+const Responses = require("../../responses");
 /**
  * Default JSON handler class.
  */
@@ -30,14 +30,14 @@ let Default = class Default extends Class.Null {
      * @param match Matched route.
      */
     exceptionResponse(match) {
-        Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.local.exception);
+        Responses.Helper.setStatusJson(match.detail.output, 500, 500, match.detail.environment.local.exception);
     }
     /**
      * Default response processor.
      * @param match Matched route.
      */
     async defaultResponse(match) {
-        Response.Helper.setStatusJson(match.detail.output, 501);
+        Responses.Helper.setStatusJson(match.detail.output, 501);
     }
 };
 __decorate([

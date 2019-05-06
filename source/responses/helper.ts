@@ -4,8 +4,6 @@
  */
 import * as Class from '@singleware/class';
 
-import * as Types from '../../types';
-
 import { Headers } from '../headers';
 
 import { Status } from './status';
@@ -176,13 +174,14 @@ export class Helper extends Class.Null {
    * Set the response status and the response content JSON.
    * @param output Output entity.
    * @param status Output status.
-   * @param message Output message.
+   * @param code Optional output code.
+   * @param text Optional output text.
    */
   @Class.Public()
-  public static setStatusJson(output: Output, status: number, message?: string): void {
+  public static setStatusJson(output: Output, status: number, code?: number, text?: string): void {
     this.setStatus(output, status);
     if (status !== 204) {
-      this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+      this.setContentJson(output, { code: code || status, text: text || this.messages[status] || '' });
     }
   }
 }

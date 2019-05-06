@@ -4,8 +4,8 @@
  */
 import * as Class from '@singleware/class';
 
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 
 import { Settings } from './settings';
 import { Policy } from './policy';
@@ -37,7 +37,7 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static setHeaders(request: Types.Request, settings: Settings): void {
-    Response.Helper.setMultipleHeaders(request.output, {
+    Responses.Helper.setMultipleHeaders(request.output, {
       'Content-Security-Policy': this.buildConcatenatedPolices(settings.polices),
       'Content-Security-Policy-Report-Only': settings.reportPolices ? this.buildConcatenatedPolices(settings.reportPolices) : void 0
     });

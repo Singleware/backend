@@ -1,6 +1,6 @@
 import * as Class from '@singleware/class';
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 import { Settings } from './settings';
 /**
  * Default file handler class.
@@ -26,13 +26,13 @@ export declare class Default extends Class.Null {
      * @param status Output status.
      * @param information Error information.
      */
-    protected setResponseError(output: Response.Output, status: number, information: string): Promise<void>;
+    protected setResponseError(output: Responses.Output, status: number, information: string): Promise<void>;
     /**
      * Set the content of the specified file into the given output response.
      * @param output Output response.
      * @param path File path.
      */
-    protected setResponseFile(output: Response.Output, path: string): Promise<void>;
+    protected setResponseFile(output: Responses.Output, path: string): Promise<void>;
     /**
      * Default constructor.
      * @param settings Handler settings.
@@ -63,5 +63,5 @@ export declare class Default extends Class.Null {
     /**
      * Gets the handler types.
      */
-    readonly types: Response.Types;
+    readonly types: Responses.Types;
 }

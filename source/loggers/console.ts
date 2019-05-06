@@ -5,7 +5,7 @@
 import * as Class from '@singleware/class';
 
 import * as Types from '../types';
-import * as Request from '../services/request';
+import * as Requests from '../requests';
 
 import { Entry } from './entry';
 
@@ -18,7 +18,7 @@ export class Console extends Class.Null implements Types.Logger {
    * Map of request entries.
    */
   @Class.Private()
-  private entryMap = new WeakMap<Request.Input, Entry>();
+  private entryMap = new WeakMap<Requests.Input, Entry>();
 
   /**
    * Gets the specified value filled by the given digit character and the minimum length.
@@ -57,13 +57,13 @@ export class Console extends Class.Null implements Types.Logger {
   private getDifferenceTime(time: Date): string {
     const difference = new Date().getTime() - time.getTime();
     if (difference < 1000) {
-      return `${this.getFilledValue(difference, 3, '0')}ms`;
+      return `${this.getFilledValue(difference, 5, ' ')}ms`;
     } else if (difference < 60000) {
-      return `${this.getFilledValue(Math.abs(difference / 1000), 3, '0')}s `;
+      return `${this.getFilledValue((difference / 1000).toFixed(2), 5, ' ')}s `;
     } else if (difference < 3600000) {
-      return `${this.getFilledValue(Math.abs(difference / 60000), 3, '0')}m `;
+      return `${this.getFilledValue((difference / 60000).toFixed(2), 5, ' ')}m `;
     } else {
-      return `${this.getFilledValue(Math.abs(difference / 3600000), 3, '0')}h `;
+      return `${this.getFilledValue((difference / 3600000).toFixed(2), 5, ' ')}h `;
     }
   }
 
@@ -77,8 +77,8 @@ export class Console extends Class.Null implements Types.Logger {
     const entry = <Entry>this.entryMap.get(request.input);
     const status = entry.status.join('');
     const difference = this.getDifferenceTime(entry.time);
-    const port = this.getFilledValue(request.input.port, 5, ' ');
-    const address = request.input.address;
+    const port = this.getFilledValue(request.input.connection.port, 5, ' ');
+    const address = request.input.connection.address;
     return `${status} ${difference} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
   }
 

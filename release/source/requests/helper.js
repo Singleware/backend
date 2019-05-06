@@ -21,7 +21,7 @@ let Helper = class Helper extends Class.Null {
      * @param search Search string.
      * @returns Returns the map containing all parameters acquired from the given search string.
      */
-    static getURLSearch(search) {
+    static parseURLSearch(search) {
         const params = new Url.URLSearchParams(search);
         const map = {};
         for (const [key, value] of params) {
@@ -41,7 +41,7 @@ let Helper = class Helper extends Class.Null {
 };
 __decorate([
     Class.Public()
-], Helper, "getURLSearch", null);
+], Helper, "parseURLSearch", null);
 Helper = __decorate([
     Class.Describe()
 ], Helper);

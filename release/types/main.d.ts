@@ -1,12 +1,12 @@
 import * as Application from '@singleware/application';
 import * as Types from './types';
-import * as Response from './services/response';
-import * as Request from './services/request';
+import * as Responses from './responses';
+import * as Requests from './requests';
 import { Settings } from './settings';
 /**
  * Back-end application class.
  */
-export declare class Main extends Application.Main<Request.Input, Response.Output> {
+export declare class Main extends Application.Main<Requests.Input, Responses.Output> {
     /**
      * Application settings.
      */

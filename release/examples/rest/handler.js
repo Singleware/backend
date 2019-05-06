@@ -35,35 +35,35 @@ let Handler = class Handler extends Backend.Handlers.Json.Default {
      * @param match Request match.
      */
     listProcessor(match) {
-        Backend.Response.setStatusJson(match.detail.output, 200);
+        Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
     }
     /**
      * Create test, request processor.
      * @param match Request match.
      */
     createProcessor(match) {
-        Backend.Response.setStatusJson(match.detail.output, 201);
+        Backend.Responses.Helper.setStatusJson(match.detail.output, 201);
     }
     /**
      * Read test, request processor.
      * @param match Request match.
      */
     readProcessor(match) {
-        Backend.Response.setStatusJson(match.detail.output, 200);
+        Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
     }
     /**
      * Update test, request processor.
      * @param match Request match.
      */
     updateProcessor(match) {
-        Backend.Response.setStatusJson(match.detail.output, 200);
+        Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
     }
     /**
      * Delete test, request processor.
      * @param match Request match.
      */
     deleteProcessor(match) {
-        Backend.Response.setStatusJson(match.detail.output, 200);
+        Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
     }
 };
 __decorate([

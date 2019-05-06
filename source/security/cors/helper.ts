@@ -4,8 +4,8 @@
  */
 import * as Class from '@singleware/class';
 
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 
 import { Settings } from './settings';
 
@@ -21,7 +21,7 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static setHeaders(request: Types.Request, settings: Settings): void {
-    Response.Helper.setMultipleHeaders(request.output, {
+    Responses.Helper.setMultipleHeaders(request.output, {
       'Access-Control-Allow-Origin': settings.allowOrigin || <string>request.input.headers['origin'],
       'Access-Control-Allow-Methods': (settings.allowMethods || ['HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']).join(', '),
       'Access-Control-Allow-Credentials': settings.allowCredentials ? 'true' : 'false',

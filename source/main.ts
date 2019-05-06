@@ -7,8 +7,8 @@ import * as Application from '@singleware/application';
 
 import * as Types from './types';
 import * as Security from './security';
-import * as Response from './services/response';
-import * as Request from './services/request';
+import * as Responses from './responses';
+import * as Requests from './requests';
 
 import { Settings } from './settings';
 import { Environment } from './environment';
@@ -17,7 +17,7 @@ import { Environment } from './environment';
  * Back-end application class.
  */
 @Class.Describe()
-export class Main extends Application.Main<Request.Input, Response.Output> {
+export class Main extends Application.Main<Requests.Input, Responses.Output> {
   /**
    * Application settings.
    */
@@ -88,7 +88,7 @@ export class Main extends Application.Main<Request.Input, Response.Output> {
       await super.processHandler(match, callback);
     } else if (match.detail.input.method === 'OPTIONS' && match.detail.output.status !== 204) {
       this.setResponseHeaders(match.detail, <Environment>{});
-      Response.Helper.setStatus(match.detail.output, 204);
+      Responses.Helper.setStatus(match.detail.output, 204);
     }
   }
 

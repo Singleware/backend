@@ -93,12 +93,13 @@ let Helper = class Helper extends Class.Null {
      * Set the response status and the response content JSON.
      * @param output Output entity.
      * @param status Output status.
-     * @param message Output message.
+     * @param code Optional output code.
+     * @param text Optional output text.
      */
-    static setStatusJson(output, status, message) {
+    static setStatusJson(output, status, code, text) {
         this.setStatus(output, status);
         if (status !== 204) {
-            this.setContentJson(output, { status: status, message: message || this.messages[status] || '' });
+            this.setContentJson(output, { code: code || status, text: text || this.messages[status] || '' });
         }
     }
 };

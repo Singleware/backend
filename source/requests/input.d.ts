@@ -3,6 +3,8 @@
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import { Headers } from '../headers';
+
+import { Connection } from './connection';
 import { Search } from './search';
 
 /**
@@ -10,13 +12,9 @@ import { Search } from './search';
  */
 export interface Input {
   /**
-   * Request address.
+   * Request connection.
    */
-  address: string;
-  /**
-   * Request port.
-   */
-  port: number;
+  connection: Connection;
   /**
    * Request method.
    */

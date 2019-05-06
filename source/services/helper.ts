@@ -6,9 +6,10 @@ import * as Http from 'http';
 
 import * as Class from '@singleware/class';
 
-import { Request, Variables } from '../types';
-import { Headers } from './headers';
-import { Search } from './request';
+import * as Types from '../types';
+import * as Requests from '../requests';
+
+import { Headers } from '../headers';
 
 /**
  * Back-end helper class.
@@ -39,9 +40,7 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static getRemoteAddress(incoming: Http.IncomingMessage): string | undefined {
-    return (
-      this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress
-    );
+    return this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress;
   }
 
   /**
@@ -51,17 +50,12 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static getRemotePort(incoming: Http.IncomingMessage): number | undefined {
-    return (
-      parseInt(<string>this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) ||
-      incoming.connection.remotePort ||
-      incoming.socket.remotePort
-    );
+    return parseInt(<string>this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) || incoming.connection.remotePort || incoming.socket.remotePort;
   }
 
   /**
    * Gets a new request with the specified parameters.
-   * @param address Request address.
-   * @param port Request port.
+   * @param connection Request connection.
    * @param method Request method.
    * @param path Request path
    * @param search Request search parameters.
@@ -70,20 +64,11 @@ export class Helper extends Class.Null {
    * @returns Returns the new request information.
    */
   @Class.Public()
-  public static getRequest(
-    address: string,
-    port: number,
-    method: string,
-    path: string,
-    search: Search,
-    headers: Headers,
-    variables: Variables
-  ): Request {
+  public static getRequest(connection: Requests.Connection, method: string, path: string, search: Requests.Search, headers: Headers, variables: Types.Variables): Types.Request {
     return {
       path: path,
       input: {
-        address: address,
-        port: port,
+        connection: connection,
         method: method,
         search: search,
         headers: headers,

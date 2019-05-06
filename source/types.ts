@@ -4,8 +4,8 @@
  */
 import * as Application from '@singleware/application';
 
-import * as Request from './services/request';
-import * as Response from './services/response';
+import * as Requests from './requests';
+import * as Responses from './responses';
 
 /**
  * Type declaration for callable members.
@@ -20,22 +20,22 @@ export type MemberDecorator = <T>(target: Object, property: string | symbol, des
 /**
  * Type declaration for application request.
  */
-export type Request = Application.Request<Request.Input, Response.Output>;
+export type Request = Application.Request<Requests.Input, Responses.Output>;
 
 /**
  * Type declaration for application service.
  */
-export type Service = Application.Service<Request.Input, Response.Output>;
+export type Service = Application.Service<Requests.Input, Responses.Output>;
 
 /**
  * Type declaration for application logger.
  */
-export type Logger = Application.Logger<Request.Input, Response.Output>;
+export type Logger = Application.Logger<Requests.Input, Responses.Output>;
 
 /**
  * Type declaration for application route match.
  */
-export type Match = Application.Match<Request.Input, Response.Output>;
+export type Match = Application.Match<Requests.Input, Responses.Output>;
 
 /**
  * Type declaration for application route variables.

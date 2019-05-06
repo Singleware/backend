@@ -18,7 +18,7 @@ export class Helper extends Class.Null {
    * @returns Returns the map containing all parameters acquired from the given search string.
    */
   @Class.Public()
-  public static getURLSearch(search: string): Search {
+  public static parseURLSearch(search: string): Search {
     const params = new Url.URLSearchParams(search);
     const map = <Search>{};
     for (const [key, value] of params) {

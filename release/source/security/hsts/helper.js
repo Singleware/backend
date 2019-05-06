@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
-const Response = require("../../services/response");
+const Responses = require("../../responses");
 /**
  * HSTS helper class.
  */
@@ -29,7 +29,7 @@ let Helper = class Helper extends Class.Null {
         if (settings.preload) {
             values.push('preload');
         }
-        Response.Helper.setMultipleHeaders(request.output, {
+        Responses.Helper.setMultipleHeaders(request.output, {
             'Strict-Transport-Security': values.join('; ')
         });
     }

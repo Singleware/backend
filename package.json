@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.2.9",
+  "version": "1.2.16",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -32,7 +32,7 @@
     "typescript": "^2.9.2"
   },
   "prettier": {
-    "printWidth": 140,
+    "printWidth": 180,
     "tabWidth": 2,
     "singleQuote": true,
     "semi": true
@@ -41,12 +41,11 @@
     "build": "npm run make-source && npm run make-examples",
     "make-source": "npx tsc -p ./source && npm run update-source",
     "make-examples": "npx tsc -p ./examples",
-    "update-source": "npm run update-base && npm run update-handlers && npm run update-services && npm run update-security",
+    "update-source": "npm run update-base && npm run update-services && npm run update-requests && npm run update-responses && npm run update-security && npm run update-handlers",
     "update-base": "cp -Rf ./source/*.d.ts ./release/types",
-    "update-services": "npm run update-services-base && npm run update-services-request && npm run update-services-response",
-    "update-services-base": "cp -Rf ./source/services/*.d.ts ./release/types/services",
-    "update-services-request": "cp -Rf ./source/services/request/*.d.ts ./release/types/services/request",
-    "update-services-response": "cp -Rf ./source/services/response/*.d.ts ./release/types/services/response",
+    "update-services": "cp -Rf ./source/services/*.d.ts ./release/types/services",
+    "update-requests": "cp -Rf ./source/requests/*.d.ts ./release/types/requests",
+    "update-responses": "cp -Rf ./source/responses/*.d.ts ./release/types/responses",
     "update-security": "npm run update-security-csp && npm run update-security-cors && npm run update-security-hsts",
     "update-security-csp": "cp -Rf ./source/security/csp/*.d.ts ./release/types/security/csp",
     "update-security-cors": "cp -Rf ./source/security/cors/*.d.ts ./release/types/security/cors",

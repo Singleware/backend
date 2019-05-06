@@ -27,34 +27,40 @@ export declare class Server extends Class.Null implements Types.Service {
      */
     private errorSubject;
     /**
-     * Gets an error request based on the specified request information.
-     * @param request Request information.
+     * Gets an error request based on the specified Request entity.
+     * @param request Request entity.
      * @returns Returns the new error request.
      */
     private getErrorRequest;
     /**
      * Response send handler.
-     * @param request Request information.
+     * @param request Request entity.
      */
     private sendHandler;
     /**
      * Request error handler.
-     * @param request Request information.
-     * @param error Error information.
+     * @param request Request entity.
+     * @param error Error entity.
      */
     private errorHandler;
     /**
-     * Request receive handler.
-     * @param request Request information.
-     * @param data Data chunk.
+     * Request receive data handler.
+     * @param request Request entity.
+     * @param buffer Buffer chunk.
      */
     private receiveHandler;
     /**
      * Response event handler.
-     * @param request Request information.
+     * @param request Request entity.
      * @param response Response manager.
      */
     private responseHandler;
+    /**
+     * Close event handler.
+     * @param request Request entity.
+     * @param response Response manager.
+     */
+    private closeHandler;
     /**
      * Request event handler.
      * @param incoming Incoming message.

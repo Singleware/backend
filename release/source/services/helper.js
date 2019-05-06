@@ -32,7 +32,7 @@ let Helper = class Helper extends Class.Null {
      * @returns Returns the remote address from the incoming message or undefined when there is no remote address.
      */
     static getRemoteAddress(incoming) {
-        return (this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress);
+        return this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress;
     }
     /**
      * Gets the remote port from the specified incoming message.
@@ -40,14 +40,11 @@ let Helper = class Helper extends Class.Null {
      * @returns Returns the remote port from the incoming message or undefined when there is no remote port.
      */
     static getRemotePort(incoming) {
-        return (parseInt(this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) ||
-            incoming.connection.remotePort ||
-            incoming.socket.remotePort);
+        return parseInt(this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) || incoming.connection.remotePort || incoming.socket.remotePort;
     }
     /**
      * Gets a new request with the specified parameters.
-     * @param address Request address.
-     * @param port Request port.
+     * @param connection Request connection.
      * @param method Request method.
      * @param path Request path
      * @param search Request search parameters.
@@ -55,12 +52,11 @@ let Helper = class Helper extends Class.Null {
      * @param variables Request variables.
      * @returns Returns the new request information.
      */
-    static getRequest(address, port, method, path, search, headers, variables) {
+    static getRequest(connection, method, path, search, headers, variables) {
         return {
             path: path,
             input: {
-                address: address,
-                port: port,
+                connection: connection,
                 method: method,
                 search: search,
                 headers: headers,

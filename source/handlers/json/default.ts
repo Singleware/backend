@@ -5,8 +5,8 @@
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import * as Response from '../../services/response';
 import * as Types from '../../types';
+import * as Responses from '../../responses';
 
 import { Settings } from './settings';
 
@@ -36,7 +36,7 @@ export class Default extends Class.Null {
   @Class.Public()
   @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
   public exceptionResponse(match: Types.Match) {
-    Response.Helper.setStatusJson(match.detail.output, 500, match.detail.environment.local.exception);
+    Responses.Helper.setStatusJson(match.detail.output, 500, 500, match.detail.environment.local.exception);
   }
 
   /**
@@ -46,6 +46,6 @@ export class Default extends Class.Null {
   @Class.Public()
   @Application.Processor({ path: '/', exact: false, environment: { methods: '*' } })
   public async defaultResponse(match: Types.Match): Promise<void> {
-    Response.Helper.setStatusJson(match.detail.output, 501);
+    Responses.Helper.setStatusJson(match.detail.output, 501);
   }
 }
