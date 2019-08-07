@@ -1,37 +1,14 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-import * as Handlers from './handlers';
-export import Handlers = Handlers;
+export { Main } from './main';
+export { Request, Service, Logger, Variables, Environment, Match } from './aliases';
 
-import * as Loggers from './loggers';
-export import Loggers = Loggers;
-
-import * as Requests from './requests';
-export import Requests = Requests;
-
-import * as Responses from './responses';
-export import Responses = Responses;
-
-import * as Services from './services';
-export import Services = Services;
-
-import * as Security from './security';
-export import Security = Security;
-
-import * as Types from './types';
-export import Types = Types;
-
-import * as Module from './main';
-export import Main = Module.Main;
-
-/**
- * Declarations.
- */
+// Declarations
 import * as Application from '@singleware/application';
 
-import { MemberDecorator } from './types';
+import { MemberDecorator } from './aliases';
 import { Action } from './action';
 
 /**
@@ -47,3 +24,47 @@ export const Filter = (action: Action): MemberDecorator => Application.Main.Filt
  * @returns Returns the decorator method.
  */
 export const Processor = (action: Action): MemberDecorator => Application.Main.Processor(action);
+
+// Imported aliases.
+import * as Handlers from './handlers';
+import * as Loggers from './loggers';
+import * as Requests from './requests';
+import * as Responses from './responses';
+import * as Services from './services';
+import * as Security from './security';
+import * as Tests from './tests';
+
+/**
+ * Handlers namespace.
+ */
+export import Handlers = Handlers;
+
+/**
+ * Loggers namespace.
+ */
+export import Loggers = Loggers;
+
+/**
+ * Requests namespace.
+ */
+export import Requests = Requests;
+
+/**
+ * Responses namespace.
+ */
+export import Responses = Responses;
+
+/**
+ * Services namespace.
+ */
+export import Services = Services;
+
+/**
+ * Security namespace.
+ */
+export import Security = Security;
+
+/**
+ * Tests namespace.
+ */
+export import Tests = Tests;

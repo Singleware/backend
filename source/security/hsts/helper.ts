@@ -1,10 +1,10 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
 
-import * as Types from '../../types';
+import * as Aliases from '../../aliases';
 import * as Responses from '../../responses';
 
 import { Settings } from './settings';
@@ -20,7 +20,7 @@ export class Helper extends Class.Null {
    * @param settings HSTS settings.
    */
   @Class.Public()
-  public static setHeaders(request: Types.Request, settings: Settings): void {
+  public static setHeaders(request: Aliases.Request, settings: Settings): void {
     const values = [`max-age=${settings.maxAge}`];
     if (settings.includeSubDomains) {
       values.push('includeSubDomains');

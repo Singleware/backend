@@ -1,5 +1,5 @@
 import * as Class from '@singleware/class';
-import * as Types from '../../types';
+import * as Aliases from '../../aliases';
 import * as Responses from '../../responses';
 import { Settings } from './settings';
 /**
@@ -42,26 +42,26 @@ export declare class Default extends Class.Null {
      * Exception response processor.
      * @param match Matched rote.
      */
-    exceptionResponse(match: Types.Match): Promise<void>;
+    exceptionResponse(match: Aliases.Match): Promise<void>;
     /**
      * Default response processor.
      * @param match Matched rote.
      */
-    defaultResponse(match: Types.Match): Promise<void>;
+    defaultResponse(match: Aliases.Match): Promise<void>;
     /**
      * Gets the base directory.
      */
-    readonly baseDirectory: string;
+    get baseDirectory(): string;
     /**
      * Gets the index file.
      */
-    readonly indexFile: string;
+    get indexFile(): string;
     /**
      * Gets the strict types status.
      */
-    readonly strictTypes: boolean;
+    get strictTypes(): boolean;
     /**
      * Gets the handler types.
      */
-    readonly types: Responses.Types;
+    get types(): Responses.Types;
 }

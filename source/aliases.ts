@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -33,11 +33,21 @@ export type Service = Application.Service<Requests.Input, Responses.Output>;
 export type Logger = Application.Logger<Requests.Input, Responses.Output>;
 
 /**
+ * Type declaration for application route variables.
+ */
+export type Variables = Application.Variables;
+
+/**
+ * Type declaration for application route environment.
+ */
+export type Environment = Application.Environment;
+
+/**
  * Type declaration for application route match.
  */
 export type Match = Application.Match<Requests.Input, Responses.Output>;
 
 /**
- * Type declaration for application route variables.
+ * Application match.
  */
-export type Variables = Application.Variables;
+export const Match = Application.Match;

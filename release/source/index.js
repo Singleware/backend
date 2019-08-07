@@ -1,28 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-const Handlers = require("./handlers");
-exports.Handlers = Handlers;
-const Loggers = require("./loggers");
-exports.Loggers = Loggers;
-const Requests = require("./requests");
-exports.Requests = Requests;
-const Responses = require("./responses");
-exports.Responses = Responses;
-const Services = require("./services");
-exports.Services = Services;
-const Security = require("./security");
-exports.Security = Security;
-const Types = require("./types");
-exports.Types = Types;
-const Module = require("./main");
-exports.Main = Module.Main;
-/**
- * Declarations.
- */
+var main_1 = require("./main");
+exports.Main = main_1.Main;
+var aliases_1 = require("./aliases");
+exports.Match = aliases_1.Match;
+// Declarations
 const Application = require("@singleware/application");
 /**
  * Decorates the specified member to filter an application request. (Alias for Main.Filter)
@@ -36,3 +22,40 @@ exports.Filter = (action) => Application.Main.Filter(action);
  * @returns Returns the decorator method.
  */
 exports.Processor = (action) => Application.Main.Processor(action);
+// Imported aliases.
+const Handlers = require("./handlers");
+const Loggers = require("./loggers");
+const Requests = require("./requests");
+const Responses = require("./responses");
+const Services = require("./services");
+const Security = require("./security");
+const Tests = require("./tests");
+/**
+ * Handlers namespace.
+ */
+exports.Handlers = Handlers;
+/**
+ * Loggers namespace.
+ */
+exports.Loggers = Loggers;
+/**
+ * Requests namespace.
+ */
+exports.Requests = Requests;
+/**
+ * Responses namespace.
+ */
+exports.Responses = Responses;
+/**
+ * Services namespace.
+ */
+exports.Services = Services;
+/**
+ * Security namespace.
+ */
+exports.Security = Security;
+/**
+ * Tests namespace.
+ */
+exports.Tests = Tests;
+//# sourceMappingURL=index.js.map

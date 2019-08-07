@@ -8,23 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Class = require("@singleware/class");
 /**
- * Back-end helper class.
+ * Services helper class.
  */
 let Helper = class Helper extends Class.Null {
     /**
-     * Gets the first header value from the specified header information.
-     * @param header Header information.
-     * @returns Returns the first header value or undefined when there is no header value.
+     * Gets the first header value from the specified header.
+     * @param header Header.
+     * @returns Returns the first header value or undefined when there's no header value.
      */
     static getFirstHeaderValue(header) {
-        if (header && header.length > 0) {
-            const item = (header instanceof Array ? header.shift() : header);
-            const value = item.split(',').shift().trim();
-            if (value.length) {
-                return value;
+        if (header instanceof Array) {
+            return this.getFirstHeaderValue(header.shift());
+        }
+        else if (header !== void 0) {
+            const value = header.split(',').shift();
+            if (value !== void 0) {
+                return value.trim();
             }
         }
-        return void 0;
+        else {
+            return void 0;
+        }
     }
     /**
      * Gets the remote address from the specified incoming message.
@@ -32,7 +36,9 @@ let Helper = class Helper extends Class.Null {
      * @returns Returns the remote address from the incoming message or undefined when there is no remote address.
      */
     static getRemoteAddress(incoming) {
-        return this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress;
+        return (this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) ||
+            incoming.connection.remoteAddress ||
+            incoming.socket.remoteAddress);
     }
     /**
      * Gets the remote port from the specified incoming message.
@@ -40,7 +46,9 @@ let Helper = class Helper extends Class.Null {
      * @returns Returns the remote port from the incoming message or undefined when there is no remote port.
      */
     static getRemotePort(incoming) {
-        return parseInt(this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) || incoming.connection.remotePort || incoming.socket.remotePort;
+        return (parseInt(this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) ||
+            incoming.connection.remotePort ||
+            incoming.socket.remotePort);
     }
     /**
      * Gets a new request with the specified parameters.
@@ -94,3 +102,4 @@ Helper = __decorate([
     Class.Describe()
 ], Helper);
 exports.Helper = Helper;
+//# sourceMappingURL=helper.js.map

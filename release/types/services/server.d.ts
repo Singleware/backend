@@ -1,11 +1,11 @@
 import * as Class from '@singleware/class';
 import * as Observable from '@singleware/observable';
-import * as Types from '../types';
+import * as Aliases from '../aliases';
 import { Settings } from './settings';
 /**
  * Back-end HTTP service class.
  */
-export declare class Server extends Class.Null implements Types.Service {
+export declare class Server extends Class.Null implements Aliases.Service {
     /**
      * HTTP server.
      */
@@ -75,15 +75,15 @@ export declare class Server extends Class.Null implements Types.Service {
     /**
      * Receive request event.
      */
-    readonly onReceive: Observable.Subject<Types.Request>;
+    get onReceive(): Observable.Subject<Aliases.Request>;
     /**
      * Send response event.
      */
-    readonly onSend: Observable.Subject<Types.Request>;
+    get onSend(): Observable.Subject<Aliases.Request>;
     /**
      * Error response event.
      */
-    readonly onError: Observable.Subject<Types.Request>;
+    get onError(): Observable.Subject<Aliases.Request>;
     /**
      * Starts the service listening.
      */

@@ -1,16 +1,21 @@
+/// <reference types="node" />
+/*!
+ * Copyright (C) 2018-2019 Silas B. Domingos
+ * This source code is licensed under the MIT License as described in the file LICENSE.
+ */
 import * as Http from 'http';
 import * as Class from '@singleware/class';
-import * as Types from '../types';
+import * as Types from '../aliases';
 import * as Requests from '../requests';
 import { Headers } from '../headers';
 /**
- * Back-end helper class.
+ * Services helper class.
  */
 export declare class Helper extends Class.Null {
     /**
-     * Gets the first header value from the specified header information.
-     * @param header Header information.
-     * @returns Returns the first header value or undefined when there is no header value.
+     * Gets the first header value from the specified header.
+     * @param header Header.
+     * @returns Returns the first header value or undefined when there's no header value.
      */
     private static getFirstHeaderValue;
     /**

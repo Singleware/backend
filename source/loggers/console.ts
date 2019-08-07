@@ -1,10 +1,10 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
 
-import * as Types from '../types';
+import * as Aliases from '../aliases';
 import * as Requests from '../requests';
 
 import { Entry } from './entry';
@@ -13,7 +13,7 @@ import { Entry } from './entry';
  * Back-end HTTP logger class.
  */
 @Class.Describe()
-export class Console extends Class.Null implements Types.Logger {
+export class Console extends Class.Null implements Aliases.Logger {
   /**
    * Map of request entries.
    */
@@ -39,13 +39,13 @@ export class Console extends Class.Null implements Types.Logger {
   @Class.Private()
   private getCurrentTime(): string {
     const time = new Date();
+    const year = time.getUTCFullYear();
     const month = this.getFilledValue(time.getUTCMonth() + 1, 2, '0');
     const date = this.getFilledValue(time.getUTCDate(), 2, '0');
-    const year = time.getUTCFullYear();
     const hour = this.getFilledValue(time.getUTCHours(), 2, '0');
     const minute = this.getFilledValue(time.getUTCMinutes(), 2, '0');
     const second = this.getFilledValue(time.getUTCSeconds(), 2, '0');
-    return `${month}-${date}-${year} ${hour}:${minute}:${second}`;
+    return `${year}-${month}-${date}T${hour}:${minute}:${second}Z`;
   }
 
   /**
@@ -54,7 +54,7 @@ export class Console extends Class.Null implements Types.Logger {
    * @returns Returns the difference time.
    */
   @Class.Private()
-  private getDifferenceTime(time: Date): string {
+  private getElapsedTime(time: Date): string {
     const difference = new Date().getTime() - time.getTime();
     if (difference < 1000) {
       return `${this.getFilledValue(difference, 5, ' ')}ms`;
@@ -73,13 +73,13 @@ export class Console extends Class.Null implements Types.Logger {
    * @returns Returns the request resume.
    */
   @Class.Private()
-  private getRequestResume(request: Types.Request): string {
+  private getRequestResume(request: Aliases.Request): string {
     const entry = <Entry>this.entryMap.get(request.input);
-    const status = entry.status.join('');
-    const difference = this.getDifferenceTime(entry.time);
+    const status = `${entry.status.process ? 'P' : ''}${entry.status.error ? 'E' : ''}${entry.status.send ? 'S' : ''}`;
+    const elapsed = this.getElapsedTime(entry.time);
     const port = this.getFilledValue(request.input.connection.port, 5, ' ');
     const address = request.input.connection.address;
-    return `${status} ${difference} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
+    return `${status} ${elapsed} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
   }
 
   /**
@@ -87,8 +87,15 @@ export class Console extends Class.Null implements Types.Logger {
    * @param request Request information.
    */
   @Class.Public()
-  public onReceive(request: Types.Request): void {
-    this.entryMap.set(request.input, { time: new Date(), status: ['R', '-', '-'] });
+  public onReceive(request: Aliases.Request): void {
+    this.entryMap.set(request.input, {
+      time: new Date(),
+      status: {
+        process: false,
+        error: false,
+        send: false
+      }
+    });
   }
 
   /**
@@ -96,8 +103,8 @@ export class Console extends Class.Null implements Types.Logger {
    * @param request Request information.
    */
   @Class.Public()
-  public onProcess(request: Types.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status[1] = 'P';
+  public onProcess(request: Aliases.Request): void {
+    (<Entry>this.entryMap.get(request.input)).status.process = true;
   }
 
   /**
@@ -105,8 +112,8 @@ export class Console extends Class.Null implements Types.Logger {
    * @param request Request information.
    */
   @Class.Public()
-  public onSend(request: Types.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status[2] = 'S';
+  public onSend(request: Aliases.Request): void {
+    (<Entry>this.entryMap.get(request.input)).status.send = true;
     console.log(`${this.getCurrentTime()} ${this.getRequestResume(request)}`);
   }
 
@@ -115,8 +122,8 @@ export class Console extends Class.Null implements Types.Logger {
    * @param request Request information.
    */
   @Class.Public()
-  public onError(request: Types.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status[2] = 'E';
+  public onError(request: Aliases.Request): void {
+    (<Entry>this.entryMap.get(request.input)).status.error = true;
     console.log(`${this.getCurrentTime()} ${this.getRequestResume(request)} "${(<Error>request.error).message}"`);
   }
 
@@ -125,7 +132,7 @@ export class Console extends Class.Null implements Types.Logger {
    */
   @Class.Public()
   public onStart(): void {
-    console.log(`${this.getCurrentTime()} B`);
+    console.log(`${this.getCurrentTime()} L`);
   }
 
   /**
@@ -133,6 +140,6 @@ export class Console extends Class.Null implements Types.Logger {
    */
   @Class.Public()
   public onStop(): void {
-    console.log(`${this.getCurrentTime()} T`);
+    console.log(`${this.getCurrentTime()} C`);
   }
 }

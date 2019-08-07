@@ -1,11 +1,11 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import * as Types from './types';
+import * as Aliases from './aliases';
 import * as Security from './security';
 import * as Responses from './responses';
 import * as Requests from './requests';
@@ -41,7 +41,7 @@ export class Main extends Application.Main<Requests.Input, Responses.Output> {
    * @param variables Route variables.
    */
   @Class.Private()
-  private setResponseHeaders(request: Types.Request, variables: Environment): void {
+  private setResponseHeaders(request: Aliases.Request, variables: Environment): void {
     if (this.settings.contentSecurityPolicy || variables.contentSecurityPolicy) {
       Security.CSP.Helper.setHeaders(request, <Security.CSP.Settings>{
         ...this.settings.contentSecurityPolicy,
@@ -69,7 +69,7 @@ export class Main extends Application.Main<Requests.Input, Responses.Output> {
    * @returns Returns true when the filter handler still allows the request matching or false otherwise.
    */
   @Class.Protected()
-  protected async filterHandler(match: Types.Match, allowed: boolean): Promise<boolean> {
+  protected async filterHandler(match: Aliases.Match, allowed: boolean): Promise<boolean> {
     if (!allowed) {
       this.setResponseHeaders(match.detail, <Environment>match.variables);
     }
@@ -82,7 +82,7 @@ export class Main extends Application.Main<Requests.Input, Responses.Output> {
    * @param callback Handler callback.
    */
   @Class.Protected()
-  protected async processHandler(match: Types.Match, callback: Types.Callable): Promise<void> {
+  protected async processHandler(match: Aliases.Match, callback: Aliases.Callable): Promise<void> {
     if (this.isAllowedMethod(match.detail.input.method, match.variables.methods)) {
       this.setResponseHeaders(match.detail, <Environment>match.variables);
       await super.processHandler(match, callback);

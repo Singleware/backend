@@ -6,12 +6,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-const Http = require("http");
 const Url = require("url");
+const Http = require("http");
 const Class = require("@singleware/class");
 const Observable = require("@singleware/observable");
 const Requests = require("../requests");
@@ -216,3 +216,4 @@ Server = __decorate([
     Class.Describe()
 ], Server);
 exports.Server = Server;
+//# sourceMappingURL=server.js.map

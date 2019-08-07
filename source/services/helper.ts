@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -6,31 +6,33 @@ import * as Http from 'http';
 
 import * as Class from '@singleware/class';
 
-import * as Types from '../types';
+import * as Types from '../aliases';
 import * as Requests from '../requests';
 
 import { Headers } from '../headers';
 
 /**
- * Back-end helper class.
+ * Services helper class.
  */
 @Class.Describe()
 export class Helper extends Class.Null {
   /**
-   * Gets the first header value from the specified header information.
-   * @param header Header information.
-   * @returns Returns the first header value or undefined when there is no header value.
+   * Gets the first header value from the specified header.
+   * @param header Header.
+   * @returns Returns the first header value or undefined when there's no header value.
    */
   @Class.Private()
   private static getFirstHeaderValue(header: string | string[] | undefined): string | undefined {
-    if (header && header.length > 0) {
-      const item = <string>(header instanceof Array ? <string>header.shift() : header);
-      const value = (<string>item.split(',').shift()).trim();
-      if (value.length) {
-        return value;
+    if (header instanceof Array) {
+      return this.getFirstHeaderValue(header.shift());
+    } else if (header !== void 0) {
+      const value = header.split(',').shift();
+      if (value !== void 0) {
+        return value.trim();
       }
+    } else {
+      return void 0;
     }
-    return void 0;
   }
 
   /**
@@ -40,7 +42,11 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static getRemoteAddress(incoming: Http.IncomingMessage): string | undefined {
-    return this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) || incoming.connection.remoteAddress || incoming.socket.remoteAddress;
+    return (
+      <string>this.getFirstHeaderValue(incoming.headers['x-forwarded-for']) ||
+      incoming.connection.remoteAddress ||
+      incoming.socket.remoteAddress
+    );
   }
 
   /**
@@ -50,7 +56,11 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static getRemotePort(incoming: Http.IncomingMessage): number | undefined {
-    return parseInt(<string>this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) || incoming.connection.remotePort || incoming.socket.remotePort;
+    return (
+      parseInt(<string>this.getFirstHeaderValue(incoming.headers['x-forwarded-port'])) ||
+      incoming.connection.remotePort ||
+      incoming.socket.remotePort
+    );
   }
 
   /**
@@ -64,7 +74,14 @@ export class Helper extends Class.Null {
    * @returns Returns the new request information.
    */
   @Class.Public()
-  public static getRequest(connection: Requests.Connection, method: string, path: string, search: Requests.Search, headers: Headers, variables: Types.Variables): Types.Request {
+  public static getRequest(
+    connection: Requests.Connection,
+    method: string,
+    path: string,
+    search: Requests.Search,
+    headers: Headers,
+    variables: Types.Variables
+  ): Types.Request {
     return {
       path: path,
       input: {

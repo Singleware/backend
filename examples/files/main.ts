@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -52,5 +52,5 @@ class Example extends Backend.Main {
   }
 }
 
-// Start the application
-const instance = new Example();
+// Start application.
+new Example();

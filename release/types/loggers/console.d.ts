@@ -1,9 +1,13 @@
+/*!
+ * Copyright (C) 2018-2019 Silas B. Domingos
+ * This source code is licensed under the MIT License as described in the file LICENSE.
+ */
 import * as Class from '@singleware/class';
-import * as Types from '../types';
+import * as Aliases from '../aliases';
 /**
  * Back-end HTTP logger class.
  */
-export declare class Console extends Class.Null implements Types.Logger {
+export declare class Console extends Class.Null implements Aliases.Logger {
     /**
      * Map of request entries.
      */
@@ -26,7 +30,7 @@ export declare class Console extends Class.Null implements Types.Logger {
      * @param time Time object.
      * @returns Returns the difference time.
      */
-    private getDifferenceTime;
+    private getElapsedTime;
     /**
      * Gets the request resume for the specified request information.
      * @param request Request information.
@@ -37,22 +41,22 @@ export declare class Console extends Class.Null implements Types.Logger {
      * Receive handler.
      * @param request Request information.
      */
-    onReceive(request: Types.Request): void;
+    onReceive(request: Aliases.Request): void;
     /**
      * Process handler.
      * @param request Request information.
      */
-    onProcess(request: Types.Request): void;
+    onProcess(request: Aliases.Request): void;
     /**
      * Send handler.
      * @param request Request information.
      */
-    onSend(request: Types.Request): void;
+    onSend(request: Aliases.Request): void;
     /**
      * Error handler.
      * @param request Request information.
      */
-    onError(request: Types.Request): void;
+    onError(request: Aliases.Request): void;
     /**
      * Start handler.
      */

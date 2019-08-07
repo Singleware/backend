@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -78,7 +78,7 @@ let Helper = class Helper extends Class.Null {
      * @param type Output MIME type.
      */
     static setContentAttachment(output, name, data, type) {
-        this.setHeader(output, 'Content-Disposition', `attachment filename='${name}'`);
+        this.setHeader(output, 'Content-Disposition', `inline; filename='${name}'`);
         this.setContent(output, data, type);
     }
     /**
@@ -199,3 +199,4 @@ Helper = __decorate([
     Class.Describe()
 ], Helper);
 exports.Helper = Helper;
+//# sourceMappingURL=helper.js.map

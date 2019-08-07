@@ -1,9 +1,18 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
+
+// Imported aliases.
 import * as File from './file';
+import * as JSON from './json';
+
+/**
+ * File namespace.
+ */
 export import File = File;
 
-import * as Json from './json';
-export import Json = Json;
+/**
+ * JSON namespace.
+ */
+export import JSON = JSON;

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -156,7 +156,7 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static setContentAttachment(output: Output, name: string, data: string | Buffer, type?: string): void {
-    this.setHeader(output, 'Content-Disposition', `attachment filename='${name}'`);
+    this.setHeader(output, 'Content-Disposition', `inline; filename='${name}'`);
     this.setContent(output, data, type);
   }
 

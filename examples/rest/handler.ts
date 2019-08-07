@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -9,14 +9,14 @@ import * as Backend from '../../source';
  * External handler, example class.
  */
 @Class.Describe()
-export class Handler extends Backend.Handlers.Json.Default {
+export class Handler extends Backend.Handlers.JSON.Default {
   /**
    * Error processor.
    * @param match Request match.
    */
   @Class.Public()
   @Backend.Processor({ path: '#', exact: false, environment: { methods: '*' } })
-  public errorProcessor(match: Backend.Types.Match): void {
+  public errorProcessor(match: Backend.Match): void {
     super.exceptionResponse(match);
   }
 
@@ -26,7 +26,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/', exact: false, environment: { methods: '*' } })
-  public defaultProcessor(match: Backend.Types.Match): void {
+  public defaultProcessor(match: Backend.Match): void {
     super.defaultResponse(match);
   }
 
@@ -36,7 +36,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests', environment: { methods: 'GET' } })
-  public listProcessor(match: Backend.Types.Match): void {
+  public listProcessor(match: Backend.Match): void {
     Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
@@ -46,7 +46,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests', environment: { methods: 'POST' } })
-  public createProcessor(match: Backend.Types.Match): void {
+  public createProcessor(match: Backend.Match): void {
     Backend.Responses.Helper.setStatusJson(match.detail.output, 201);
   }
 
@@ -56,7 +56,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'GET' } })
-  public readProcessor(match: Backend.Types.Match): void {
+  public readProcessor(match: Backend.Match): void {
     Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
@@ -66,7 +66,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'PATCH' } })
-  public updateProcessor(match: Backend.Types.Match): void {
+  public updateProcessor(match: Backend.Match): void {
     Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 
@@ -76,7 +76,7 @@ export class Handler extends Backend.Handlers.Json.Default {
    */
   @Class.Public()
   @Backend.Processor({ path: '/tests/{id}', constraint: { id: /[0-9]*/ }, environment: { methods: 'DELETE' } })
-  public deleteProcessor(match: Backend.Types.Match): void {
+  public deleteProcessor(match: Backend.Match): void {
     Backend.Responses.Helper.setStatusJson(match.detail.output, 200);
   }
 }

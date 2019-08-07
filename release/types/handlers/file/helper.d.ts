@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import * as Class from '@singleware/class';
 /**
  * File helper class.

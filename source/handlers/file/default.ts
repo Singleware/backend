@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
@@ -7,7 +7,7 @@ import * as Path from 'path';
 import * as Class from '@singleware/class';
 import * as Application from '@singleware/application';
 
-import * as Types from '../../types';
+import * as Aliases from '../../aliases';
 import * as Responses from '../../responses';
 
 import { Settings } from './settings';
@@ -101,7 +101,7 @@ export class Default extends Class.Null {
    */
   @Class.Public()
   @Application.Processor({ path: '#', exact: false, environment: { methods: '*' } })
-  public async exceptionResponse(match: Types.Match): Promise<void> {
+  public async exceptionResponse(match: Aliases.Match): Promise<void> {
     await this.setResponseError(match.detail.output, 500, match.detail.environment.local.exception);
   }
 
@@ -111,7 +111,7 @@ export class Default extends Class.Null {
    */
   @Class.Public()
   @Application.Processor({ path: '/', exact: false, environment: { methods: 'GET' } })
-  public async defaultResponse(match: Types.Match): Promise<void> {
+  public async defaultResponse(match: Aliases.Match): Promise<void> {
     const path = match.detail.path === '/' ? Path.basename(this.settings.indexFile) : Path.normalize(match.detail.path);
     await this.setResponseFile(match.detail.output, path);
   }

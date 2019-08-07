@@ -1,14 +1,14 @@
-/*
+/*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
-import * as Http from 'http';
 import * as Url from 'url';
+import * as Http from 'http';
 
 import * as Class from '@singleware/class';
 import * as Observable from '@singleware/observable';
 
-import * as Types from '../types';
+import * as Aliases from '../aliases';
 import * as Requests from '../requests';
 
 import { Settings } from './settings';
@@ -18,7 +18,7 @@ import { Helper } from './helper';
  * Back-end HTTP service class.
  */
 @Class.Describe()
-export class Server extends Class.Null implements Types.Service {
+export class Server extends Class.Null implements Aliases.Service {
   /**
    * HTTP server.
    */
@@ -35,19 +35,19 @@ export class Server extends Class.Null implements Types.Service {
    * Receive subject instance.
    */
   @Class.Private()
-  private receiveSubject = new Observable.Subject<Types.Request>();
+  private receiveSubject = new Observable.Subject<Aliases.Request>();
 
   /**
    * Send subject instance.
    */
   @Class.Private()
-  private sendSubject = new Observable.Subject<Types.Request>();
+  private sendSubject = new Observable.Subject<Aliases.Request>();
 
   /**
    * Error subject instance.
    */
   @Class.Private()
-  private errorSubject = new Observable.Subject<Types.Request>();
+  private errorSubject = new Observable.Subject<Aliases.Request>();
 
   /**
    * Gets an error request based on the specified Request entity.
@@ -55,7 +55,7 @@ export class Server extends Class.Null implements Types.Service {
    * @returns Returns the new error request.
    */
   @Class.Private()
-  private getErrorRequest(request: Types.Request): Types.Request {
+  private getErrorRequest(request: Aliases.Request): Aliases.Request {
     if (!request.error) {
       return request;
     }
@@ -70,7 +70,7 @@ export class Server extends Class.Null implements Types.Service {
    * @param request Request entity.
    */
   @Class.Private()
-  private async sendHandler(request: Types.Request): Promise<void> {
+  private async sendHandler(request: Aliases.Request): Promise<void> {
     await this.sendSubject.notifyAll(request);
   }
 
@@ -80,7 +80,7 @@ export class Server extends Class.Null implements Types.Service {
    * @param error Error entity.
    */
   @Class.Private()
-  private async errorHandler(request: Types.Request, response: Http.ServerResponse, error: Error): Promise<void> {
+  private async errorHandler(request: Aliases.Request, response: Http.ServerResponse, error: Error): Promise<void> {
     request.error = error;
     await this.errorSubject.notifyAll(request);
     if (!response.finished && request.input.connection.active) {
@@ -94,7 +94,7 @@ export class Server extends Class.Null implements Types.Service {
    * @param buffer Buffer chunk.
    */
   @Class.Private()
-  private receiveHandler(request: Types.Request, buffer: string): void {
+  private receiveHandler(request: Aliases.Request, buffer: string): void {
     request.input.data += buffer;
   }
 
@@ -104,7 +104,7 @@ export class Server extends Class.Null implements Types.Service {
    * @param response Response manager.
    */
   @Class.Private()
-  private async responseHandler(request: Types.Request, response: Http.ServerResponse): Promise<void> {
+  private async responseHandler(request: Aliases.Request, response: Http.ServerResponse): Promise<void> {
     await this.receiveSubject.notifyAll(request);
     if (request.error) {
       this.responseHandler(this.getErrorRequest(request), response);
@@ -123,7 +123,7 @@ export class Server extends Class.Null implements Types.Service {
    * @param response Response manager.
    */
   @Class.Private()
-  private async closeHandler(request: Types.Request, response: Http.ServerResponse): Promise<void> {
+  private async closeHandler(request: Aliases.Request, response: Http.ServerResponse): Promise<void> {
     request.input.connection.active = false;
     if (!response.finished) {
       request.error = new Error(`Connection closed unexpectedly.`);
@@ -165,7 +165,7 @@ export class Server extends Class.Null implements Types.Service {
    * Receive request event.
    */
   @Class.Public()
-  public get onReceive(): Observable.Subject<Types.Request> {
+  public get onReceive(): Observable.Subject<Aliases.Request> {
     return this.receiveSubject;
   }
 
@@ -173,7 +173,7 @@ export class Server extends Class.Null implements Types.Service {
    * Send response event.
    */
   @Class.Public()
-  public get onSend(): Observable.Subject<Types.Request> {
+  public get onSend(): Observable.Subject<Aliases.Request> {
     return this.sendSubject;
   }
 
@@ -181,7 +181,7 @@ export class Server extends Class.Null implements Types.Service {
    * Error response event.
    */
   @Class.Public()
-  public get onError(): Observable.Subject<Types.Request> {
+  public get onError(): Observable.Subject<Aliases.Request> {
     return this.errorSubject;
   }
 

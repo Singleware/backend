@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.2.16",
+  "version": "1.2.26",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
@@ -22,27 +22,30 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@singleware/application": "^1.2.5",
+    "@singleware/application": "^1.2.10",
     "@singleware/class": "^1.1.19",
-    "@singleware/observable": "^1.0.21"
+    "@singleware/observable": "^1.0.21",
+    "@singleware/pipeline": "^1.0.18"
   },
   "devDependencies": {
-    "@types/node": "^10.14.1",
-    "prettier": "^1.16.4",
-    "typescript": "^2.9.2"
+    "@types/node": "^10.17.9",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.3"
   },
   "prettier": {
-    "printWidth": 180,
+    "printWidth": 140,
     "tabWidth": 2,
     "singleQuote": true,
     "semi": true
   },
   "scripts": {
-    "build": "npm run make-source && npm run make-examples",
+    "build": "npm run clean && npm run make-source && npm run make-examples",
+    "clean": "rm -rf ./release",
     "make-source": "npx tsc -p ./source && npm run update-source",
     "make-examples": "npx tsc -p ./examples",
-    "update-source": "npm run update-base && npm run update-services && npm run update-requests && npm run update-responses && npm run update-security && npm run update-handlers",
+    "update-source": "npm run update-base && npm run update-tests && npm run update-services && npm run update-requests && npm run update-responses && npm run update-security && npm run update-handlers",
     "update-base": "cp -Rf ./source/*.d.ts ./release/types",
+    "update-tests": "cp -Rf ./source/tests/*.d.ts ./release/types/tests",
     "update-services": "cp -Rf ./source/services/*.d.ts ./release/types/services",
     "update-requests": "cp -Rf ./source/requests/*.d.ts ./release/types/requests",
     "update-responses": "cp -Rf ./source/responses/*.d.ts ./release/types/responses",

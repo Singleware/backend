@@ -1,5 +1,5 @@
 import * as Application from '@singleware/application';
-import * as Types from './types';
+import * as Aliases from './aliases';
 import * as Responses from './responses';
 import * as Requests from './requests';
 import { Settings } from './settings';
@@ -30,13 +30,13 @@ export declare class Main extends Application.Main<Requests.Input, Responses.Out
      * @param allowed Determine whether the filter is allowing the request matching or not.
      * @returns Returns true when the filter handler still allows the request matching or false otherwise.
      */
-    protected filterHandler(match: Types.Match, allowed: boolean): Promise<boolean>;
+    protected filterHandler(match: Aliases.Match, allowed: boolean): Promise<boolean>;
     /**
      * Process event handler.
      * @param match Matched routes.
      * @param callback Handler callback.
      */
-    protected processHandler(match: Types.Match, callback: Types.Callable): Promise<void>;
+    protected processHandler(match: Aliases.Match, callback: Aliases.Callable): Promise<void>;
     /**
      * Default constructor.
      * @param settings Application settings.
