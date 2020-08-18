@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Helper = void 0;
 /*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -17,20 +18,22 @@ const Class = require("@singleware/class");
  */
 let Helper = class Helper extends Class.Null {
     /**
-     * Gets one map containing all search parameters from the specified search string.
+     * Generate a new map containing all search parameters from the specified search string.
      * @param search Search string.
-     * @returns Returns the map containing all parameters acquired from the given search string.
+     * @returns Returns the map containing all parameters parsed from the given search string.
      */
     static parseURLSearch(search) {
         const params = new Url.URLSearchParams(search);
         const map = {};
         for (const [key, value] of params) {
             const current = map[key];
-            if (current) {
-                if (typeof current === 'string') {
-                    map[key] = [current];
+            if (current !== void 0) {
+                if (current instanceof Array) {
+                    current.push(value);
                 }
-                map[key].push(value);
+                else {
+                    map[key] = [current, value];
+                }
             }
             else {
                 map[key] = value;
@@ -38,10 +41,40 @@ let Helper = class Helper extends Class.Null {
         }
         return map;
     }
+    /**
+     * Generate a new string containing all search parameters from the specified search map.
+     * @param search Search map.
+     * @returns Returns the string corresponding to the given search map.
+     */
+    static stringfyURLSearch(search) {
+        const params = [];
+        for (const [key, value] of Object.entries(search)) {
+            if (value instanceof Array) {
+                for (const current of value) {
+                    if (current.length > 0) {
+                        params.push(`${key}=${encodeURI(current)}`);
+                    }
+                    else {
+                        params.push(`${key}`);
+                    }
+                }
+            }
+            else if (value.length > 0) {
+                params.push(`${key}=${encodeURI(value)}`);
+            }
+            else {
+                params.push(`${key}`);
+            }
+        }
+        return params.join('&');
+    }
 };
 __decorate([
     Class.Public()
 ], Helper, "parseURLSearch", null);
+__decorate([
+    Class.Public()
+], Helper, "stringfyURLSearch", null);
 Helper = __decorate([
     Class.Describe()
 ], Helper);

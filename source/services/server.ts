@@ -59,8 +59,9 @@ export class Server extends Class.Null implements Aliases.Service {
     if (!request.error) {
       return request;
     }
-    const input = request.input;
-    return Helper.getRequest(input.connection, input.method, `#${request.path}`, input.search, input.headers, {
+    const { connection, method, domain, search, headers } = request.input;
+    const path = `#${request.path}`;
+    return Helper.getRequest(connection, method, domain, path, search, headers, {
       exception: this.settings.debug ? request.error.stack : request.error.message
     });
   }
@@ -141,10 +142,12 @@ export class Server extends Class.Null implements Aliases.Service {
     const port = incoming.connection.remotePort || incoming.socket.remotePort || 0;
     const address = Helper.getRemoteAddress(incoming) || '0.0.0.0';
     const method = (incoming.method || 'GET').toUpperCase();
+    const domain = Helper.getDomainName(incoming) || '.';
+    const headers = incoming.headers;
     const url = Url.parse(incoming.url || '/');
-    const search = Requests.Helper.parseURLSearch(url.search || '');
     const path = url.pathname || '/';
-    const request = Helper.getRequest({ active: true, address: address, port: port }, method, path, search, incoming.headers, {});
+    const search = Requests.Helper.parseURLSearch(url.search || '');
+    const request = Helper.getRequest({ active: true, address: address, port: port }, method, domain, path, search, headers, {});
     incoming.on('data', this.receiveHandler.bind(this, request));
     incoming.on('error', this.errorHandler.bind(this, request, response));
     incoming.on('end', this.responseHandler.bind(this, request, response));

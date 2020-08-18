@@ -6,13 +6,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Helper = void 0;
 const Class = require("@singleware/class");
 /**
  * Services helper class.
  */
 let Helper = class Helper extends Class.Null {
     /**
-     * Gets the first header value from the specified header.
+     * Get the first header value from the specified header.
      * @param header Header.
      * @returns Returns the first header value or undefined when there's no header value.
      */
@@ -20,18 +21,24 @@ let Helper = class Helper extends Class.Null {
         if (header instanceof Array) {
             return this.getFirstHeaderValue(header.shift());
         }
-        else if (header !== void 0) {
+        if (header !== void 0) {
             const value = header.split(',').shift();
             if (value !== void 0) {
                 return value.trim();
             }
         }
-        else {
-            return void 0;
-        }
+        return void 0;
     }
     /**
-     * Gets the remote address from the specified incoming message.
+     * Gets the requested domain name.
+     * @param incoming Incoming message.
+     * @returns Returns the requested domain name or undefined when there's no incoming host header.
+     */
+    static getDomainName(incoming) {
+        return this.getFirstHeaderValue(incoming.headers['host']);
+    }
+    /**
+     * Get the remote address from the specified incoming message.
      * @param incoming Incoming message.
      * @returns Returns the remote address from the incoming message or undefined when there is no remote address.
      */
@@ -41,7 +48,7 @@ let Helper = class Helper extends Class.Null {
             incoming.socket.remoteAddress);
     }
     /**
-     * Gets the remote port from the specified incoming message.
+     * Get the remote port from the specified incoming message.
      * @param incoming Incoming message.
      * @returns Returns the remote port from the incoming message or undefined when there is no remote port.
      */
@@ -51,21 +58,23 @@ let Helper = class Helper extends Class.Null {
             incoming.socket.remotePort);
     }
     /**
-     * Gets a new request with the specified parameters.
+     * Get a new request with the specified parameters.
      * @param connection Request connection.
      * @param method Request method.
+     * @param domain Request domain.
      * @param path Request path
      * @param search Request search parameters.
      * @param headers Request headers.
      * @param variables Request variables.
      * @returns Returns the new request information.
      */
-    static getRequest(connection, method, path, search, headers, variables) {
+    static getRequest(connection, method, domain, path, search, headers, variables) {
         return {
             path: path,
             input: {
                 connection: connection,
                 method: method,
+                domain: domain,
                 search: search,
                 headers: headers,
                 data: ''
@@ -89,6 +98,9 @@ let Helper = class Helper extends Class.Null {
 __decorate([
     Class.Private()
 ], Helper, "getFirstHeaderValue", null);
+__decorate([
+    Class.Public()
+], Helper, "getDomainName", null);
 __decorate([
     Class.Public()
 ], Helper, "getRemoteAddress", null);

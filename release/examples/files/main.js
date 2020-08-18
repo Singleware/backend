@@ -23,8 +23,11 @@ let Example = class Example extends Backend.Main {
                 includeSubDomains: true,
                 preload: true
             },
-            contentSecurityPolice: {
-                polices: [{ name: 'default-src', value: "'self'" }, { name: 'child-src', value: "'self'" }]
+            contentSecurityPolicy: {
+                polices: [
+                    { name: 'default-src', value: "'self'" },
+                    { name: 'child-src', value: "'self'" }
+                ]
             }
         });
         // Add console logger.

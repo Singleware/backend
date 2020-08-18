@@ -32,6 +32,10 @@ export interface Options {
    */
   search?: Requests.Search;
   /**
+   * Request domain.
+   */
+  domain?: string;
+  /**
    * Request method.
    */
   method?: string;

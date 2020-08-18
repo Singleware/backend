@@ -16,6 +16,10 @@ export interface Input {
    */
   connection: Connection;
   /**
+   * Request domain.
+   */
+  domain: string;
+  /**
    * Request method.
    */
   method: string;

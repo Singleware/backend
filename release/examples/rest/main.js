@@ -23,8 +23,11 @@ let Example = class Example extends Backend.Main {
                 allowMethods: ['GET', 'POST', 'PATCH', 'DELETE'],
                 maxAge: 3600
             },
-            contentSecurityPolice: {
-                polices: [{ name: 'default-src', value: "'self'" }, { name: 'child-src', value: "'self'" }]
+            contentSecurityPolicy: {
+                polices: [
+                    { name: 'default-src', value: "'self'" },
+                    { name: 'child-src', value: "'self'" }
+                ]
             }
         });
         // Add console logger.

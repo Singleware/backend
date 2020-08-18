@@ -5,5 +5,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 var default_1 = require("./default");
-exports.Default = default_1.Default;
+Object.defineProperty(exports, "Default", { enumerable: true, get: function () { return default_1.Default; } });
 //# sourceMappingURL=index.js.map

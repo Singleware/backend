@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Server = void 0;
 /*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -50,8 +51,9 @@ let Server = class Server extends Class.Null {
         if (!request.error) {
             return request;
         }
-        const input = request.input;
-        return helper_1.Helper.getRequest(input.connection, input.method, `#${request.path}`, input.search, input.headers, {
+        const { connection, method, domain, search, headers } = request.input;
+        const path = `#${request.path}`;
+        return helper_1.Helper.getRequest(connection, method, domain, path, search, headers, {
             exception: this.settings.debug ? request.error.stack : request.error.message
         });
     }
@@ -121,10 +123,12 @@ let Server = class Server extends Class.Null {
         const port = incoming.connection.remotePort || incoming.socket.remotePort || 0;
         const address = helper_1.Helper.getRemoteAddress(incoming) || '0.0.0.0';
         const method = (incoming.method || 'GET').toUpperCase();
+        const domain = helper_1.Helper.getDomainName(incoming) || '.';
+        const headers = incoming.headers;
         const url = Url.parse(incoming.url || '/');
-        const search = Requests.Helper.parseURLSearch(url.search || '');
         const path = url.pathname || '/';
-        const request = helper_1.Helper.getRequest({ active: true, address: address, port: port }, method, path, search, incoming.headers, {});
+        const search = Requests.Helper.parseURLSearch(url.search || '');
+        const request = helper_1.Helper.getRequest({ active: true, address: address, port: port }, method, domain, path, search, headers, {});
         incoming.on('data', this.receiveHandler.bind(this, request));
         incoming.on('error', this.errorHandler.bind(this, request, response));
         incoming.on('end', this.responseHandler.bind(this, request, response));

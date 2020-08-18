@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Helper = void 0;
 /*!
  * Copyright (C) 2018-2019 Silas B. Domingos
  * This source code is licensed under the MIT License as described in the file LICENSE.
@@ -24,9 +25,10 @@ let Helper = class Helper extends Class.Null {
      * @returns Returns the generated application request.
      */
     static getRequest(options) {
-        const request = Services.Helper.getRequest(options.connection, options.method, options.path, options.search, options.headers, options.environment.local);
+        var _a, _b, _c, _d;
+        const request = Services.Helper.getRequest(options.connection, options.domain, options.method, options.path, options.search, options.headers, (_b = (_a = options.environment) === null || _a === void 0 ? void 0 : _a.local) !== null && _b !== void 0 ? _b : {});
         request.input.data = options.data;
-        request.environment.shared = options.environment.shared;
+        request.environment.shared = (_d = (_c = options.environment) === null || _c === void 0 ? void 0 : _c.shared) !== null && _d !== void 0 ? _d : {};
         return request;
     }
     /**
@@ -57,6 +59,7 @@ Helper.defaultOptions = {
     remaining: '',
     search: {},
     method: 'GET',
+    domain: 'test.io',
     headers: {},
     data: ''
 };

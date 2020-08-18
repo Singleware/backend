@@ -17,7 +17,7 @@ import { Headers } from '../headers';
 @Class.Describe()
 export class Helper extends Class.Null {
   /**
-   * Gets the first header value from the specified header.
+   * Get the first header value from the specified header.
    * @param header Header.
    * @returns Returns the first header value or undefined when there's no header value.
    */
@@ -25,18 +25,28 @@ export class Helper extends Class.Null {
   private static getFirstHeaderValue(header: string | string[] | undefined): string | undefined {
     if (header instanceof Array) {
       return this.getFirstHeaderValue(header.shift());
-    } else if (header !== void 0) {
+    }
+    if (header !== void 0) {
       const value = header.split(',').shift();
       if (value !== void 0) {
         return value.trim();
       }
-    } else {
-      return void 0;
     }
+    return void 0;
   }
 
   /**
-   * Gets the remote address from the specified incoming message.
+   * Gets the requested domain name.
+   * @param incoming Incoming message.
+   * @returns Returns the requested domain name or undefined when there's no incoming host header.
+   */
+  @Class.Public()
+  public static getDomainName(incoming: Http.IncomingMessage): string | undefined {
+    return this.getFirstHeaderValue(incoming.headers['host']);
+  }
+
+  /**
+   * Get the remote address from the specified incoming message.
    * @param incoming Incoming message.
    * @returns Returns the remote address from the incoming message or undefined when there is no remote address.
    */
@@ -50,7 +60,7 @@ export class Helper extends Class.Null {
   }
 
   /**
-   * Gets the remote port from the specified incoming message.
+   * Get the remote port from the specified incoming message.
    * @param incoming Incoming message.
    * @returns Returns the remote port from the incoming message or undefined when there is no remote port.
    */
@@ -64,9 +74,10 @@ export class Helper extends Class.Null {
   }
 
   /**
-   * Gets a new request with the specified parameters.
+   * Get a new request with the specified parameters.
    * @param connection Request connection.
    * @param method Request method.
+   * @param domain Request domain.
    * @param path Request path
    * @param search Request search parameters.
    * @param headers Request headers.
@@ -77,6 +88,7 @@ export class Helper extends Class.Null {
   public static getRequest(
     connection: Requests.Connection,
     method: string,
+    domain: string,
     path: string,
     search: Requests.Search,
     headers: Headers,
@@ -87,6 +99,7 @@ export class Helper extends Class.Null {
       input: {
         connection: connection,
         method: method,
+        domain: domain,
         search: search,
         headers: headers,
         data: ''
