@@ -79,7 +79,7 @@ let Helper = class Helper extends Class.Null {
      * @param type Output MIME type.
      */
     static setContentAttachment(output, name, data, type) {
-        this.setHeader(output, 'Content-Disposition', `inline; filename='${name}'`);
+        this.setHeader(output, 'Content-Disposition', `inline; filename="${name}"`);
         this.setContent(output, data, type);
     }
     /**

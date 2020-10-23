@@ -156,7 +156,7 @@ export class Helper extends Class.Null {
    */
   @Class.Public()
   public static setContentAttachment(output: Output, name: string, data: string | Buffer, type?: string): void {
-    this.setHeader(output, 'Content-Disposition', `inline; filename='${name}'`);
+    this.setHeader(output, 'Content-Disposition', `inline; filename="${name}"`);
     this.setContent(output, data, type);
   }
 
