@@ -34,5 +34,5 @@ export interface Input {
   /**
    * Request data.
    */
-  data: string;
+  data: Buffer;
 }

@@ -77,7 +77,7 @@ let Helper = class Helper extends Class.Null {
                 domain: domain,
                 search: search,
                 headers: headers,
-                data: ''
+                data: Buffer.alloc(0)
             },
             output: {
                 status: 501,

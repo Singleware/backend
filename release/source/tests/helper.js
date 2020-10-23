@@ -27,7 +27,7 @@ let Helper = class Helper extends Class.Null {
     static getRequest(options) {
         var _a, _b, _c, _d;
         const request = Services.Helper.getRequest(options.connection, options.domain, options.method, options.path, options.search, options.headers, (_b = (_a = options.environment) === null || _a === void 0 ? void 0 : _a.local) !== null && _b !== void 0 ? _b : {});
-        request.input.data = options.data;
+        request.input.data = Buffer.from(options.data);
         request.environment.shared = (_d = (_c = options.environment) === null || _c === void 0 ? void 0 : _c.shared) !== null && _d !== void 0 ? _d : {};
         return request;
     }

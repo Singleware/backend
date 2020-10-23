@@ -54,7 +54,7 @@ export class Helper extends Class.Null {
       options.headers,
       options.environment?.local ?? {}
     );
-    request.input.data = options.data;
+    request.input.data = Buffer.from(options.data);
     request.environment.shared = options.environment?.shared ?? {};
     return request;
   }

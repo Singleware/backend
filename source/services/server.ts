@@ -95,8 +95,8 @@ export class Server extends Class.Null implements Aliases.Service {
    * @param buffer Buffer chunk.
    */
   @Class.Private()
-  private receiveHandler(request: Aliases.Request, buffer: string): void {
-    request.input.data += buffer;
+  private receiveHandler(request: Aliases.Request, buffer: Buffer): void {
+    request.input.data = Buffer.concat([request.input.data, buffer]);
   }
 
   /**

@@ -82,7 +82,7 @@ let Server = class Server extends Class.Null {
      * @param buffer Buffer chunk.
      */
     receiveHandler(request, buffer) {
-        request.input.data += buffer;
+        request.input.data = Buffer.concat([request.input.data, buffer]);
     }
     /**
      * Response event handler.
