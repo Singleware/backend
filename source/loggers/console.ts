@@ -74,12 +74,13 @@ export class Console extends Class.Null implements Aliases.Logger {
    */
   @Class.Private()
   private getRequestResume(request: Aliases.Request): string {
-    const entry = <Entry>this.entryMap.get(request.input);
+    const entry = this.entryMap.get(request.input)!;
     const status = `${entry.status.process ? 'P' : ''}${entry.status.error ? 'E' : ''}${entry.status.send ? 'S' : ''}`;
     const elapsed = this.getElapsedTime(entry.time);
     const port = this.getFilledValue(request.input.connection.port, 5, ' ');
     const address = request.input.connection.address;
-    return `${status} ${elapsed} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
+    const search = Requests.Helper.stringfyURLSearch(request.input.search);
+    return `${status} ${elapsed} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path} ${search}`;
   }
 
   /**
@@ -104,7 +105,7 @@ export class Console extends Class.Null implements Aliases.Logger {
    */
   @Class.Public()
   public onProcess(request: Aliases.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status.process = true;
+    this.entryMap.get(request.input)!.status.process = true;
   }
 
   /**
@@ -113,7 +114,7 @@ export class Console extends Class.Null implements Aliases.Logger {
    */
   @Class.Public()
   public onSend(request: Aliases.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status.send = true;
+    this.entryMap.get(request.input)!.status.send = true;
     console.log(`${this.getCurrentTime()} ${this.getRequestResume(request)}`);
   }
 
@@ -123,8 +124,8 @@ export class Console extends Class.Null implements Aliases.Logger {
    */
   @Class.Public()
   public onError(request: Aliases.Request): void {
-    (<Entry>this.entryMap.get(request.input)).status.error = true;
-    console.log(`${this.getCurrentTime()} ${this.getRequestResume(request)} "${(<Error>request.error).message}"`);
+    this.entryMap.get(request.input)!.status.error = true;
+    console.log(`${this.getCurrentTime()} ${this.getRequestResume(request)} "${request.error!.message}"`);
   }
 
   /**

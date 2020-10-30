@@ -12,6 +12,7 @@ exports.Console = void 0;
  * This source code is licensed under the MIT License as described in the file LICENSE.
  */
 const Class = require("@singleware/class");
+const Requests = require("../requests");
 /**
  * Back-end HTTP logger class.
  */
@@ -78,7 +79,8 @@ let Console = class Console extends Class.Null {
         const elapsed = this.getElapsedTime(entry.time);
         const port = this.getFilledValue(request.input.connection.port, 5, ' ');
         const address = request.input.connection.address;
-        return `${status} ${elapsed} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path}`;
+        const search = Requests.Helper.stringfyURLSearch(request.input.search);
+        return `${status} ${elapsed} ${port} ${address}\t${request.output.status} ${request.input.method} ${request.path} ${search}`;
     }
     /**
      * Receive handler.

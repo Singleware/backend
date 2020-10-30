@@ -7,7 +7,7 @@
   "name": "@singleware/backend",
   "description": "Singleware backend project package.",
   "license": "MIT",
-  "version": "1.2.33",
+  "version": "1.2.34",
   "main": "release/source/index.js",
   "types": "release/types/index.d.ts",
   "keywords": [
